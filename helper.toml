@@ -1,0 +1,5 @@
+module script = .lua
+
+server script = .server.lua
+
+client script = .client.lua
