@@ -1,5 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local DataStore = require(ReplicatedStorage.Modules.DataStore)
+local DataStore = require(ReplicatedStorage.DataStore)
 local RebirthEvent = ReplicatedStorage.Remotes.UI.RebirthButton
 local NoRebirthEvent = ReplicatedStorage.Remotes.UI.noRebirthButton
 local RebirthShowPets = ReplicatedStorage.Remotes.Pets.RebirthShowPets

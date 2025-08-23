@@ -29,7 +29,7 @@ function module.reachedCheckpoint()
 	local rs = game:GetService("ReplicatedStorage")
 	local sound:Sound = game.Workspace:WaitForChild("GameConfig").Sounds.CheckpointReached
 	
-	local text = game.Players.LocalPlayer.PlayerGui.Messages.Canvas.Frame.TextLabel
+	local text = game.Players.LocalPlayer.PlayerGui.Messages.NotCanvas.Frame.TextLabel
 	local message = "CHECKPOINT!"
 	local color = Color3.new(0.0666667, 0.360784, 0.486275)
 
@@ -103,7 +103,7 @@ function module.ShowCoinsEarned(CoinsEarned: number)
 	local TweenService = game:GetService("TweenService")
 
 	local LocalPlayer = game.Players.LocalPlayer
-	local CoinFrame = LocalPlayer.PlayerGui.Messages.Canvas.Coin
+	local CoinFrame = LocalPlayer.PlayerGui.Messages.NotCanvas.Coin
 	local Quantity = CoinFrame.Quantity
 
 	local targetPos = UDim2.new(0.65, 0, 0.2, 0)
@@ -125,14 +125,14 @@ function module.ShowCoinsEarned(CoinsEarned: number)
 end
 
 function module.PetCollected(petName: string)
-	local checkpointModule = require(game.ReplicatedStorage.Modules.Checkpoints)
+	local checkpointModule = require(game.ReplicatedStorage.Checkpoints)
 	local Checkpoints = checkpointModule.checkpoints
 
 	local TweenService = game:GetService("TweenService")
 	local LocalPlayer = game.Players.LocalPlayer
 	local PlayerGui = LocalPlayer.PlayerGui
 	local PetTween: ScreenGui = PlayerGui.PetTween
-	local Frame: Frame = PetTween.Frame
+	local Frame: Frame = PetTween.NotCanvas
 	local ImageLabel: ImageLabel = Frame.ImageLabel
 
 	local goalPosition = UDim2.new(0.037, 0, 0.562, 0)
@@ -152,7 +152,7 @@ function module.PetCollected(petName: string)
 	end
 
 	if not petData then
-		warn("Pet data not found for: " .. petName)
+		warn("[UIModule.PetCollected] Pet data not found for: " .. petName)
 		return
 	end
 
@@ -209,11 +209,10 @@ end
 
 function module.PlayPetSound(petName:string)
 	local petFolder = game.Workspace:WaitForChild("GameConfig"):WaitForChild("Sounds"):WaitForChild("PetSounds")
-	if not petFolder then warn("No PetFolder founded") return end
+	if not petFolder then warn("[UIModule.PlayPetSound] No PetFolder founded") return end
 	
 	local sound:Sound = petFolder:FindFirstChild(petName)
-	if not sound then warn("No sound for " .. petName .. " founded.") return end
-	
+	if not sound then warn("[UIModule.PlayPetSound] No sound for " .. petName .. " founded.") return end
 	sound:Play()
 	
 end

@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local ContextActionService = game:GetService("ContextActionService")
 local StartEndGameAnimation = ReplicatedStorage.Remotes.UI.EndGameAnimation
 local player = game.Players.LocalPlayer
-local HelperModule = require(ReplicatedStorage.Modules.Helper)
+local HelperModule = require(ReplicatedStorage.Helper)
 
 local TimeBetweenPhrases = 2
 local skipDialogue = false

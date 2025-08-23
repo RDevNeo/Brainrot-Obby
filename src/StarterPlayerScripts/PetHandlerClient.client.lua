@@ -2,10 +2,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local GetPlayerPetsRF = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("GetPlayerPets")
+local GetPlayerPetsRF = ReplicatedStorage:WaitForChild("GetPlayerPets")
 local NewPetEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("NewPet")
 local RebirthShowPets = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("RebirthShowPets")
-local UIModule = require(ReplicatedStorage.Modules.UI)
+local UIModule = require(ReplicatedStorage.UI)
 
 local PetsModelRP = ReplicatedStorage:FindFirstChild("PetsModelFolder")
 if not PetsModelRP then
@@ -68,7 +68,6 @@ local function movePetBackToWorkspace(petName)
 		end)
 
 		if success then
-			print("Moved pet '" .. petName .. "' back to Workspace")
 			return true
 		else
 			warn("Failed to move pet '" .. petName .. "' back to Workspace")
@@ -102,8 +101,6 @@ local function moveAllOwnedPetsToClient()
 end
 
 local function moveAllPetsBackToWorkspace()
-	print("Moving all pets back to workspace (client-side)")
-
 	local petsToMove = {}
 	for _, pet in pairs(PetsModelRP:GetChildren()) do
 		if pet:IsA("Model") then
@@ -116,8 +113,6 @@ local function moveAllPetsBackToWorkspace()
 	end
 
 	currentPlayerPets = {}
-
-	print("Finished moving " .. #petsToMove .. " pets back to workspace (client-side)")
 end
 
 NewPetEvent.OnClientEvent:Connect(function(petName)
@@ -126,14 +121,12 @@ NewPetEvent.OnClientEvent:Connect(function(petName)
 			table.insert(currentPlayerPets, petName)
 		end
 	end
-	pcall(function()
-		UIModule.PetCollected(petName)
-		UIModule.PlayPetSound(petName)
-	end)
+
+	UIModule.PetCollected(petName)
+	UIModule.PlayPetSound(petName)
 end)
 
 RebirthShowPets.OnClientEvent:Connect(function()
-	print("Rebirth event received - showing all pets")
 	moveAllPetsBackToWorkspace()
 end)
 

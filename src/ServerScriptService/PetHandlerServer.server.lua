@@ -1,8 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local DataStore = require(ReplicatedStorage.Modules.DataStore)
-local AllPetsModule = require(ReplicatedStorage.PetsModules.AllPets)
+local DataStore = require(ReplicatedStorage.DataStore)
+local AllPetsModule = require(ReplicatedStorage.AllPets)
 local AllPetsTable = AllPetsModule.allPets
 
 local AllPetsModelFolder = workspace:FindFirstChild("AllPetsModels")

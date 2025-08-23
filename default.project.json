@@ -31,6 +31,8 @@
         "$className": "Part",
         "$properties": {
           "Anchored": true,
+          "CanCollide": false,
+          "Transparency": 1,
           "Color": [
             0.38823,
             0.37254,

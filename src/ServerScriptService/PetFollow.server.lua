@@ -1,5 +1,3 @@
--- i didn't made it.
-
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -11,7 +9,6 @@ local HorizontalSpacing = 2
 local RowSpacing = 2
 local VerticalOffset = -2.5
 local SpringFreq = 10
-local RotSpringFreq = 14
 local MIN_LOOK_MAG = 1e-6
 local petState = setmetatable({}, { __mode = "k" })
 
@@ -109,7 +106,7 @@ RunService.Heartbeat:Connect(function(dt)
 
 			local lookCurrentVec = Vector3.new(curLookH.X, 0, curLookH.Z)
 			local lookTargetVec = Vector3.new(tgtLookH.X, 0, tgtLookH.Z)
-			local newLookVec, newLookVel = springStepVec3(lookCurrentVec, state.lookVel, lookTargetVec, RotSpringFreq, dt)
+			local newLookVec, newLookVel = springStepVec3(lookCurrentVec, state.lookVel, lookTargetVec, SpringFreq, dt)
 			state.lookVel = newLookVel
 
 			if newLookVec.Magnitude < MIN_LOOK_MAG then

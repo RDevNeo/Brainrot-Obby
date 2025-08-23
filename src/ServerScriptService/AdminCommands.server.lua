@@ -1,6 +1,6 @@
 local rs = game:GetService("ReplicatedStorage")
 local event = rs.Remotes.UI.ResetPlayerData
-local ds = require(rs.Modules.DataStore)
+local ds = require(rs.DataStore)
 
 event.OnServerEvent:Connect(function(player:Player, whatToReset:string)
 	local resetNumber = 0 

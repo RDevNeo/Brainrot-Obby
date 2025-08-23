@@ -4,7 +4,7 @@ local Workspace = game:GetService("Workspace")
 local checkpointFolder = Workspace:WaitForChild("CheckPoints")
 local forwardEvent = ReplicatedStorage:WaitForChild("Remotes").UI.FowardButton
 local backwardsEvent = ReplicatedStorage:WaitForChild("Remotes").UI.BackwardsButton
-local dsModule = require(ReplicatedStorage.Modules.DataStore)
+local dsModule = require(ReplicatedStorage.DataStore)
 
 local playerCurrentPosition = {}
 

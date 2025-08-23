@@ -1,19 +1,19 @@
 local Players = game:GetService("Players")
 local DataStoreService = game:GetService("DataStoreService")
-local badgeDataStore = DataStoreService:GetDataStore("PlayerBadges")
+local badgeDataStore = DataStoreService:GetDataStore("PlayerBadges_V2")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local PlayerInventoryRemote = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("PlayerInventory")
+local PlayerInventoryRemote = ReplicatedStorage.PlayerInventory
 
-local HelperModule = require(ReplicatedStorage.Modules.Helper)
-local GetPlayerPetsRF = ReplicatedStorage.Remotes.Pets.GetPlayerPets
+local HelperModule = require(ReplicatedStorage.Helper)
+local GetPlayerPetsRF = ReplicatedStorage.GetPlayerPets
 
 local module = {}
 
-local coinsDataStore = DataStoreService:GetDataStore("CoinsData")
-local itemsDataStore = DataStoreService:GetDataStore("PurchasedItems")
-local checkpointDataStore = DataStoreService:GetDataStore("CheckpointData")
-local rebirthsDataStore = DataStoreService:GetDataStore("RebirthsData")
-local ownedPetsDataStore = DataStoreService:GetDataStore("OwnedPetsData")
+local coinsDataStore = DataStoreService:GetDataStore("CoinsData_V2")
+local itemsDataStore = DataStoreService:GetDataStore("PurchasedItems_V2")
+local checkpointDataStore = DataStoreService:GetDataStore("CheckpointData_V2")
+local rebirthsDataStore = DataStoreService:GetDataStore("RebirthsData_V2")
+local ownedPetsDataStore = DataStoreService:GetDataStore("OwnedPetsData_V2")
 
 local playerOwnedItems = {}
 local playerBadges = {}
@@ -39,7 +39,6 @@ local function SavePlayerPets(player)
 		warn("Failed to save pets for " .. player.Name .. ": " .. tostring(errorMessage))
 		return false
 	else
-		print("Successfully saved pets for " .. player.Name)
 		return true
 	end
 end
@@ -293,7 +292,6 @@ function module.GivePet(player, petName)
 
 	if not table.find(playerOwnedPets[player.UserId], petName) then
 		table.insert(playerOwnedPets[player.UserId], petName)
-		print("Added pet '" .. petName .. "' to " .. player.Name)
 		return SavePlayerPets(player)
 	else
 		return true
@@ -313,8 +311,7 @@ function module.RemovePet(player, petName)
 
 	for i, name in ipairs(playerOwnedPets[player.UserId]) do
 		if name == petName then
-			table.remove(playerOwnedPets[player.UserId], i)
-			print("Removed pet '" .. petName .. "' from " .. player.Name)
+			table.remove(playerOwnedPets[player.UserId], i)	
 			return SavePlayerPets(player)
 		end
 	end
@@ -345,10 +342,8 @@ function module.RemoveAllPets(player: Player)
 	end
 
 	playerOwnedPets[player.UserId] = {}
-	print("Removed all pets from " .. player.Name)
 	
 	module.RemoveAllPhysicalPets(player)
-	print("Removed all physicals pets from " .. player.Name)
 	
 	return SavePlayerPets(player)
 end
@@ -374,7 +369,6 @@ function module.GetOwnedPets(player)
 	end
 
 	local pets = playerOwnedPets[player.UserId] or {}
-	print("GetOwnedPets returning for " .. player.Name .. ":", pets)
 	return pets
 end
 

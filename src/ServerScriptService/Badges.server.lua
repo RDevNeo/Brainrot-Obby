@@ -1,7 +1,7 @@
 local badge = game:GetService("BadgeService")
 local rs = game:GetService("ReplicatedStorage")
-local ds = require(rs.Modules.DataStore)
-local badgesModule = require(rs.Modules.Badges)
+local ds = require(rs.DataStore)
+local badgesModule = require(rs.Badges)
 local Badges = badgesModule.Items
 
 local event = rs.Remotes.Checkpoint.CheckpointTouch
@@ -20,7 +20,6 @@ event.Event:Connect(function(checkpoint, player)
 		if success then
 			ds.PlayerHasBadge(player, badgeId)
 			ds.SavePlayerBadge(player, badgeId)
-			print("Awarded badge", badgeId, "to", player.Name)
 		else
 			warn("Failed to award badge:", err)
 		end

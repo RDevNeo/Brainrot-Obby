@@ -2,7 +2,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local itemsModule = require(ReplicatedStorage.Modules.RobuxItems)
+local itemsModule = require(ReplicatedStorage.RobuxItems)
 local items = itemsModule.Items
 
 local itemFolder = ReplicatedStorage:WaitForChild("ItemsFolder"):WaitForChild("RobuxShopItems")

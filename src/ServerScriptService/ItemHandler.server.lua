@@ -2,9 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local BoughtEvent = ReplicatedStorage.Remotes.UI.BoughtItems
 local BoughtSuccess = ReplicatedStorage.Remotes.UI.BoughtSuccesfull
-local ItemsModule = require(ReplicatedStorage.Modules.CoinsItems)
+local ItemsModule = require(ReplicatedStorage.CoinsItems)
 local Items = ItemsModule.Items
-local DataStoreModule = require(ReplicatedStorage.Modules.DataStore)
+local DataStoreModule = require(ReplicatedStorage.DataStore)
 local PhysicalItemFolder = ReplicatedStorage.ItemsFolder.CoinShopItems
 
 local function giveOwnedItems(player)

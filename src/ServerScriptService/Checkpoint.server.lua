@@ -4,7 +4,7 @@ local rs = game:GetService("ReplicatedStorage")
 local CheckpointEvent = rs.Remotes.Checkpoint.CheckpointTouch
 local CheckpointNotifier = rs.Remotes.Checkpoint.CheckpointNotifier
 local CoinsUIEvent = rs.Remotes.UI.ShowCoinsUI
-local ds = require(rs.Modules.DataStore)
+local ds = require(rs.DataStore)
 
 local CoinsQuantity = 10
 

@@ -1,11 +1,10 @@
 local rs = game:GetService("ReplicatedStorage")
-local ds = require(rs.Modules.DataStore)
-local RewardsData = require(rs.Modules.Rewards)
+local ds = require(rs.DataStore)
+local RewardsData = require(rs.Rewards)
 local Rewards = RewardsData.Rewards
 local RewardsEvent = rs.Remotes.UI.Reward
 
 RewardsEvent.OnServerEvent:Connect(function(player, rewardId)
-	print("event - received")
 
 	local reward = nil
 	for _, rewardData in ipairs(Rewards) do
@@ -19,7 +18,6 @@ RewardsEvent.OnServerEvent:Connect(function(player, rewardId)
 		warn("Reward not found for ID: " .. tostring(rewardId))
 		return 
 	end
-	print("reward exists")
 
 	local coinsToReward = reward.coinsToReward
 	if not coinsToReward then 
@@ -27,8 +25,5 @@ RewardsEvent.OnServerEvent:Connect(function(player, rewardId)
 		return 
 	end
 
-	print("coins to reward exists: " .. coinsToReward)
-
 	ds.AddCoins(player, coinsToReward)
-	print("coins given to " .. player.Name .. ": " .. coinsToReward)
 end)
