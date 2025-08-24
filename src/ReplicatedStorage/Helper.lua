@@ -417,6 +417,35 @@ function module.EnableAllUIs()
 	end
 end
 
+function module.PlayRandomPetSound()
+	local player = game.Players.LocalPlayer
+	local petsSoundFolder = game.Workspace:WaitForChild("GameConfig").Sounds.PetSounds
+	local playerPetFolder = game.Workspace.PlayerPets:WaitForChild(player.Name)
+
+	if not petsSoundFolder or not playerPetFolder then
+		warn("Pet sound folder or player pet folder not found.")
+		return
+	end
+
+	while true do
+		local randomTime = math.random(15, 40)
+		local pets = playerPetFolder:GetChildren()
+		if #pets == 0 then
+			warn("No pets found for the player, waiting for pets...")
+			task.wait(5)
+		end
+		local randomIndex = math.random(1, #pets)
+		local randomPet = pets[randomIndex]
+
+		local sound = petsSoundFolder:FindFirstChild(randomPet.Name)
+		if sound then
+			sound:Play()
+		else
+			warn("Sound not found for pet: " .. randomPet.Name)
+		end
+		task.wait(randomTime)
+	end
+end
 
 return module
 
