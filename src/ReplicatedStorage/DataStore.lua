@@ -8,16 +8,18 @@ local HelperModule = require(ReplicatedStorage.Helper)
 local GetPlayerPetsRF = ReplicatedStorage.GetPlayerPets
 
 local module = {}
-
+	
 local coinsDataStore = DataStoreService:GetDataStore("CoinsData_V2")
 local itemsDataStore = DataStoreService:GetDataStore("PurchasedItems_V2")
 local checkpointDataStore = DataStoreService:GetDataStore("CheckpointData_V2")
 local rebirthsDataStore = DataStoreService:GetDataStore("RebirthsData_V2")
 local ownedPetsDataStore = DataStoreService:GetDataStore("OwnedPetsData_V2")
+local goldenCoinsDataStore = DataStoreService:GetDataStore("GoldenCoinsData_V2")
 
 local playerOwnedItems = {}
 local playerBadges = {}
 local playerOwnedPets = {}
+local playerGoldenCoins = {}
 local playerDataLoaded = {}
 
 local function SavePlayerPets(player)
@@ -98,6 +100,24 @@ local function LoadPlayerData(player)
 		playerOwnedPets[player.UserId] = {}
 	end
 
+	playerDataLoaded[player.UserId] = {}
+
+	local goldenCoinsValue = Instance.new("NumberValue")
+	goldenCoinsValue.Name = "GoldenCoins"
+	goldenCoinsValue.Parent = player
+
+	local successGoldenCoins, savedGoldenCoins = pcall(function()
+		return goldenCoinsDataStore:GetAsync(player.UserId)
+	end)
+
+	if successGoldenCoins and type(savedGoldenCoins) == "number" then
+		goldenCoinsValue.Value = savedGoldenCoins
+		playerGoldenCoins[player.UserId] = savedGoldenCoins
+	else
+		goldenCoinsValue.Value = 0
+		playerGoldenCoins[player.UserId] = 0
+	end
+
 	playerDataLoaded[player.UserId] = true
 end
 
@@ -142,10 +162,18 @@ local function SavePlayerData(player)
 
 	SavePlayerPets(player)
 
-	playerDataLoaded[player.UserId] = nil
-	playerOwnedItems[player.UserId] = nil
 	playerBadges[player.UserId] = nil
 	playerOwnedPets[player.UserId] = nil
+
+	local goldenCoinsValue = player:FindFirstChild("GoldenCoins")
+	if goldenCoinsValue then
+		pcall(function()
+			goldenCoinsDataStore:SetAsync(player.UserId, goldenCoinsValue.Value)
+		end)
+	end
+	playerGoldenCoins[player.UserId] = nil
+
+	playerDataLoaded[player.UserId] = nil
 end
 
 function module.AddCoins(player, quantity)
@@ -197,6 +225,46 @@ function module.GetPlayerCoins(player)
 		return coins and coins.Value or 0
 	end
 	return 0
+end
+
+function module.AddGoldenCoins(player, quantity)
+	if not player then return 0 end
+	local goldenCoinsValue = player:FindFirstChild("GoldenCoins")
+	if goldenCoinsValue then
+		goldenCoinsValue.Value += quantity
+		playerGoldenCoins[player.UserId] = goldenCoinsValue.Value -- Keep server-side table in sync
+		return goldenCoinsValue.Value
+	end
+	return 0
+end
+
+function module.RemoveGoldenCoins(player, quantity)
+	if not player then return 0 end
+	local goldenCoinsValue = player:FindFirstChild("GoldenCoins")
+	if goldenCoinsValue then
+		goldenCoinsValue.Value = math.max(0, goldenCoinsValue.Value - quantity)
+		playerGoldenCoins[player.UserId] = goldenCoinsValue.Value -- Keep server-side table in sync
+		return goldenCoinsValue.Value
+	end
+	return 0
+end
+
+function module.GetGoldenCoins(player)
+	if not player then return 0 end
+	local goldenCoinsValue = player:FindFirstChild("GoldenCoins")
+	if goldenCoinsValue then
+		return goldenCoinsValue.Value
+	end
+	return playerGoldenCoins[player.UserId] or 0 -- Fallback to server-side table if value not found
+end
+
+function module.SetGoldenCoins(player, value)
+	if not player then return end
+	local goldenCoinsValue = player:FindFirstChild("GoldenCoins")
+	if goldenCoinsValue then
+		goldenCoinsValue.Value = value
+		playerGoldenCoins[player.UserId] = value -- Keep server-side table in sync
+	end
 end
 
 function module.SetCheckpoint(player, value)

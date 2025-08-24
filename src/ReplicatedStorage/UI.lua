@@ -62,7 +62,7 @@ function module.TweenInactive(guiObject: GuiObject)
 	if not guiObject then return end
 	local TweenService = game:GetService("TweenService")
 
-	local targetPos = UDim2.new(0.5, 0, -1, 0)
+	local targetPos = UDim2.new(0.5, 0, -5, 0)
 	local tweenInfo = TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 
 	local tween = TweenService:Create(guiObject, tweenInfo, {Position = targetPos})

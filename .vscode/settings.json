@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "Dialong"
+    ],
+    "robloxLsp.diagnostics.disable": [
+        "trailing-space"
     ]
 }

@@ -433,6 +433,7 @@ function module.PlayRandomPetSound()
 		if #pets == 0 then
 			warn("No pets found for the player, waiting for pets...")
 			task.wait(5)
+			continue
 		end
 		local randomIndex = math.random(1, #pets)
 		local randomPet = pets[randomIndex]

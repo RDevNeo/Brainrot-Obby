@@ -22,9 +22,11 @@ local function UpdateVisibility()
                 end
                 
                 local originalPosition = imageLabel.Position
+                imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0) -- Ensure it starts from a centered position
+                
                 local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, -1, true, 0)
                 
-                local bounceTween = TweenService:Create(imageLabel, tweenInfo, {Position = originalPosition + UDim2.new(0, 0, -0.2, 0)})
+                local bounceTween = TweenService:Create(imageLabel, tweenInfo, {Position = UDim2.new(0.5, 0, 0.3, 0)}) -- Tween to a slightly higher position
                 bounceTween:Play()
                 activeTweens[imageLabel] = bounceTween
             end
@@ -37,7 +39,7 @@ local function UpdateVisibility()
                     activeTweens[imageLabel] = nil
                 end
                 billboardGui.Enabled = false
-                imageLabel.Position = UDim2.new(0, 0.5, 0, 0.5)
+                imageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
             end
         end
 
