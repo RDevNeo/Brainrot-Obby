@@ -8,8 +8,8 @@ local HelperModule = require(ReplicatedStorage.Helper)
 local TimeBetweenPhrases = 2
 local skipDialogue = false
 
-local RebirthEvent = ReplicatedStorage.Remotes.UI.RebirthButton
-local NoRebirthEvent = ReplicatedStorage.Remotes.UI.noRebirthButton
+local WinsEvent = ReplicatedStorage.Remotes.UI.WinsButton
+local NoWinsEvent = ReplicatedStorage.Remotes.UI.noWinsButton
 
 local phrases = {
 	"This journey have been great..",
@@ -24,12 +24,12 @@ local screenGui = gui:WaitForChild("EndGame")
 local canvas = screenGui:WaitForChild("NotCanvas")
 local blackScreen = canvas:WaitForChild("BlackScreen")
 local phrasesText = canvas:WaitForChild("Phrases")
-local RebirthButton:TextButton = canvas:WaitForChild("Rebirth")
-local NoRebirthButton:TextButton = canvas:WaitForChild("noRebirth")
+local WinsButton:TextButton = canvas:WaitForChild("Wins")
+local NoWinsButton:TextButton = canvas:WaitForChild("noWins")
 local SkipDialongButton:TextButton = canvas:WaitForChild("Skip")
 
-RebirthButton.Interactable = false
-NoRebirthButton.Interactable = false
+WinsButton.Interactable = false
+NoWinsButton.Interactable = false
 
 local blackScreenTween = TweenService:Create(blackScreen, TweenInfo.new(1), {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 0})
 local blackScreenFade  = TweenService:Create(blackScreen, TweenInfo.new(1), {BackgroundTransparency = 1})
@@ -37,19 +37,19 @@ local blackScreenFade  = TweenService:Create(blackScreen, TweenInfo.new(1), {Bac
 local phrasesAppear    = TweenService:Create(phrasesText, TweenInfo.new(1), {TextTransparency = 0})
 local phrasesFade      = TweenService:Create(phrasesText, TweenInfo.new(1), {TextTransparency = 1})
 
-local RebirthButtonFadeIn  = TweenService:Create(RebirthButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
-local RebirthButtonFadeOut = TweenService:Create(RebirthButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
+local WinsButtonFadeIn  = TweenService:Create(WinsButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
+local WinsButtonFadeOut = TweenService:Create(WinsButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
 
-local NoRebirthButtonFadeIn  = TweenService:Create(NoRebirthButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
-local NoRebirthButtonFadeOut = TweenService:Create(NoRebirthButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
+local NoWinsButtonFadeIn  = TweenService:Create(NoWinsButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
+local NoWinsButtonFadeOut = TweenService:Create(NoWinsButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
 
 local SkipButtonFadeIn = TweenService:Create(SkipDialongButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
 local SkipButtonFadeOut = TweenService:Create(SkipDialongButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
 
-RebirthButtonFadeIn.Completed:Connect(function() RebirthButton.Interactable = true end)
-RebirthButtonFadeOut.Completed:Connect(function() RebirthButton.Interactable = false end)
-NoRebirthButtonFadeIn.Completed:Connect(function() NoRebirthButton.Interactable = true end)
-NoRebirthButtonFadeOut.Completed:Connect(function() NoRebirthButton.Interactable = false end)
+WinsButtonFadeIn.Completed:Connect(function() WinsButton.Interactable = true end)
+WinsButtonFadeOut.Completed:Connect(function() WinsButton.Interactable = false end)
+NoWinsButtonFadeIn.Completed:Connect(function() NoWinsButton.Interactable = true end)
+NoWinsButtonFadeOut.Completed:Connect(function() NoWinsButton.Interactable = false end)
 
 local function disableMovement()
 	ContextActionService:BindAction(
@@ -107,16 +107,16 @@ StartEndGameAnimation.OnClientEvent:Connect(function()
 	SkipButtonFadeOut:Play()
 	SkipDialongButton.Interactable = false
 
-	RebirthButtonFadeIn:Play()
-	NoRebirthButtonFadeIn:Play()
+	WinsButtonFadeIn:Play()
+	NoWinsButtonFadeIn:Play()
 
 	local function handleButtonClick(button, event)
 		button.Interactable = false
-		RebirthButton.Interactable = false
-		NoRebirthButton.Interactable = false
+		WinsButton.Interactable = false
+		NoWinsButton.Interactable = false
 
-		RebirthButtonFadeOut:Play()
-		NoRebirthButtonFadeOut:Play()
+		WinsButtonFadeOut:Play()
+		NoWinsButtonFadeOut:Play()
 
 		HelperModule.EnableAllUIs()
 		enableMovement()
@@ -125,11 +125,11 @@ StartEndGameAnimation.OnClientEvent:Connect(function()
 		event:FireServer()
 	end
 
-	NoRebirthButton.MouseButton1Click:Connect(function()
-		handleButtonClick(NoRebirthButton, NoRebirthEvent)
+	NoWinsButton.MouseButton1Click:Connect(function()
+		handleButtonClick(NoWinsButton, NoWinsEvent)
 	end)
 
-	RebirthButton.MouseButton1Click:Connect(function()
-		handleButtonClick(RebirthButton, RebirthEvent)
+	WinsButton.MouseButton1Click:Connect(function()
+		handleButtonClick(WinsButton, WinsEvent)
 	end)
 end)

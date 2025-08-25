@@ -4,7 +4,7 @@ local player = Players.LocalPlayer
 
 local GetPlayerPetsRF = ReplicatedStorage:WaitForChild("GetPlayerPets")
 local NewPetEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("NewPet")
-local RebirthShowPets = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("RebirthShowPets")
+local WinsShowPets = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("WinsShowPets")
 local UIModule = require(ReplicatedStorage.UI)
 
 local PetsModelRP = ReplicatedStorage:FindFirstChild("PetsModelFolder")
@@ -126,7 +126,7 @@ NewPetEvent.OnClientEvent:Connect(function(petName)
 	UIModule.PlayPetSound(petName)
 end)
 
-RebirthShowPets.OnClientEvent:Connect(function()
+WinsShowPets.OnClientEvent:Connect(function()
 	moveAllPetsBackToWorkspace()
 end)
 

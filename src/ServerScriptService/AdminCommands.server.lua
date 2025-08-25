@@ -18,7 +18,7 @@ event.OnServerEvent:Connect(function(player:Player, whatToReset:string)
 		ds.SetCheckpoint(player, 1)
 		ds.SetCoins(player, resetNumber)
 		ds.RemoveAllPets(player)
-		ds.SetRebirths(player, 0)
+		ds.SetWins(player, 0)
 		
 	elseif whatToReset == "MaxCheckpoint" then
 		ds.SetCheckpoint(player, 30)

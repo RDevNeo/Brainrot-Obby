@@ -18,7 +18,11 @@ function module.tweenFade(textLabel: TextLabel)
 	end)
 end
 
-function module.displayMessage(textLabel: TextLabel, message: string, textColor: Color3)
+function module.displayMessage(message:string, textColor: Color3)
+	local LocalPlayer = game.Players.LocalPlayer
+	local textLabel = LocalPlayer.PlayerGui.Messages.NotCanvas.Frame.TextLabel
+	
+	
 	textLabel.Text = message
 	textLabel.TextColor3 = textColor
 
@@ -29,11 +33,10 @@ function module.reachedCheckpoint()
 	local rs = game:GetService("ReplicatedStorage")
 	local sound:Sound = game.Workspace:WaitForChild("GameConfig").Sounds.CheckpointReached
 	
-	local text = game.Players.LocalPlayer.PlayerGui.Messages.NotCanvas.Frame.TextLabel
 	local message = "CHECKPOINT!"
-	local color = Color3.new(0.0666667, 0.360784, 0.486275)
+	local color = Color3.new(0, 1, 0)
 
-	module.displayMessage(text, message, color)
+	module.displayMessage(message, color)
 	sound:Play()
 end
 
@@ -213,7 +216,7 @@ function module.PlayPetSound(petName:string)
 	
 	local sound:Sound = petFolder:FindFirstChild(petName)
 	if not sound then warn("[UIModule.PlayPetSound] No sound for " .. petName .. " founded.") return end
-	sound:Play()
+	sound:Play() 
 	
 end
 
