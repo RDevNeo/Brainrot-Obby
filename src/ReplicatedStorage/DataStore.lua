@@ -89,14 +89,11 @@ local function SavePlayerPetMutations(player)
 	local payload = playerPetMutations[userId]
 
 	-- DB log: show what we're trying to save
-	print(string.format("[DB] Saving pet mutations for userId=%s player=%s", tostring(userId), player.Name))
 	if type(payload) == "table" then
 		local count = 0
 		for petName, data in pairs(payload) do
 			count = count + 1
-			print(string.format("[DB]  - %s => %s", tostring(petName), tostring(data and data.name or "nil")))
 		end
-		print(string.format("[DB] Total mutations to save: %d", count))
 	else
 		print("[DB] Payload is not a table; saving empty table.")
 	end
@@ -110,7 +107,6 @@ local function SavePlayerPetMutations(player)
 		return false
 	end
 
-	print(string.format("[DB] Successfully saved pet mutations for userId=%s", tostring(userId)))
 	return true
 end
 
@@ -202,13 +198,10 @@ local function LoadPlayerData(player)
 
 	if successMutations and savedMutations and type(savedMutations) == "table" then
 		playerPetMutations[player.UserId] = savedMutations
-		print(string.format("[DB] Loaded pet mutations for userId=%s player=%s", tostring(player.UserId), player.Name))
 		local count = 0
 		for petName, data in pairs(savedMutations) do
 			count = count + 1
-			print(string.format("[DB]  - %s => %s", tostring(petName), tostring(data and data.name or "nil")))
 		end
-		print(string.format("[DB] Total loaded mutations: %d", count))
 	else
 		playerPetMutations[player.UserId] = {}
 		if successMutations then
@@ -537,7 +530,6 @@ function module.GetOwnedPets(player)
 	end
 
 	if not playerDataLoaded[player.UserId] then
-		warn("GetOwnedPets: Data not loaded yet for " .. player.Name)
 		local attempts = 0
 		while not playerDataLoaded[player.UserId] and attempts < 50 do
 			task.wait(0.1)
@@ -729,7 +721,6 @@ function module.ApplyMutationFromDB(player, petName)
 		warn(string.format("[APPLY] Pet model '%s' not found in workspace.PlayerPets.%s", petName, player.Name))
 		return false
 	end
-	print(string.format("[APPLY] Found pet model '%s' for player %s", petName, player.Name))
 
 	-- 3) Get the PrimaryPart
 	local primaryPart = getPrimaryPartFromModel(petModel)
@@ -737,7 +728,6 @@ function module.ApplyMutationFromDB(player, petName)
 		warn(string.format("[APPLY] Could not find PrimaryPart for pet '%s' (player %s)", petName, player.Name))
 		return false
 	end
-	print(string.format("[APPLY] Using primary part '%s' for pet '%s' (player %s)", primaryPart.Name, petName, player.Name))
 
 	-- 4) Get mutation template from ReplicatedStorage.Mutations
 	local MutationsFolder = ReplicatedStorage:FindFirstChild("Mutations")
@@ -751,7 +741,6 @@ function module.ApplyMutationFromDB(player, petName)
 		warn(string.format("[APPLY] Mutation template '%s' not found in ReplicatedStorage.Mutations", mutationName))
 		return false
 	end
-	print(string.format("[APPLY] Found mutation template '%s' in ReplicatedStorage.Mutations", mutationName))
 
 	-- Remove existing ParticleEmitters on primaryPart
 	local removed = 0
@@ -790,7 +779,6 @@ function module.ApplyMutationFromDB(player, petName)
 	end
 
 	if addedEmitters > 0 then
-		print(string.format("[APPLY] Added %d ParticleEmitter(s) to pet '%s' (player %s) from mutation '%s'", addedEmitters, petName, player.Name, mutationName))
 	else
 		warn(string.format("[APPLY] Template '%s' contained no ParticleEmitters to add for pet '%s' (player %s)", mutationName, petName, player.Name))
 	end
@@ -923,8 +911,6 @@ Players.PlayerAdded:Connect(function(player)
 			attempts = attempts + 1
 		end
 
-		print(string.format("[JOIN] Preparing to apply pet mutations for player %s (userId=%s)", player.Name, tostring(player.UserId)))
-
 		local PlayerPetsWK = workspace:FindFirstChild("PlayerPets")
 		local playerPetFolder = PlayerPetsWK and PlayerPetsWK:FindFirstChild(player.Name)
 		if playerPetFolder and #playerPetFolder:GetChildren() > 0 then
@@ -943,7 +929,6 @@ Players.PlayerAdded:Connect(function(player)
 		end
 
 		-- 3) Pets folder not found; wait a small window for another system to spawn physical pets
-		print("[JOIN] ReplicatedStorage.Pets not found; waiting briefly for physical pets to appear in workspace.PlayerPets.")
 		local found = false
 		local start = tick()
 		while tick() - start < 5 do
