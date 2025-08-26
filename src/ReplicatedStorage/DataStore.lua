@@ -975,7 +975,7 @@ end
 if GetPlayerPetsBuffs then
 	GetPlayerPetsBuffs.OnServerInvoke = function(player)
 		local buff = module.CalculateMutationBonus(player)
-		return string.format("%.0f%%", buff * 100) -- Format as "XX%"
+		return string.format("%.0f%%", buff * 100)
 	end
 end
 
@@ -989,7 +989,7 @@ function module.CalculateMutationBonus(player)
 		end
 	end
 
-	return totalBuff / 100 -- Convert to percentage
+	return totalBuff / 100
 end
 
 return module

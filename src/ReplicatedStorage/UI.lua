@@ -1,5 +1,7 @@
 local module = {}
 
+local activeTweens = {}
+
 function module.tweenFade(textLabel: TextLabel)
 	local TweenService = game:GetService("TweenService")
 
@@ -40,37 +42,91 @@ function module.reachedCheckpoint()
 	sound:Play()
 end
 
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local activeTweens = {}
+
+local module = {}
+
+-- Utility: ensure the guiObject is still valid, otherwise fetch a fresh one
+local function resolveGuiObject(guiObject: GuiObject?): GuiObject?
+	if guiObject and guiObject.Parent then
+		-- still valid
+		return guiObject
+	end
+
+	local player = game.Players.LocalPlayer
+	if not player then return nil end
+	local playerGui = player:FindFirstChild("PlayerGui")
+	if not playerGui then return nil end
+
+	if guiObject then
+		local function findRecursive(parent, targetName)
+			for _, child in ipairs(parent:GetChildren()) do
+				if child.Name == targetName and child.ClassName == guiObject.ClassName then
+					return child
+				end
+				local found = findRecursive(child, targetName)
+				if found then return found end
+			end
+			return nil
+		end
+		return findRecursive(playerGui, guiObject.Name)
+	end
+
+	return nil
+end
+
 function module.TweenActive(guiObject: GuiObject)
+	local TweenService = game:GetService("TweenService")
+	guiObject = resolveGuiObject(guiObject)
+	if not guiObject then return end
+
 	local blur = game.Lighting:FindFirstChild("UIBlur")
 	if blur then
 		blur.Enabled = true
 	end
 
-	if not guiObject then return end
-	local TweenService = game:GetService("TweenService")
+	if activeTweens[guiObject] then
+		activeTweens[guiObject]:Cancel()
+		activeTweens[guiObject] = nil
+	end
 
-	local targetPos = UDim2.new(0.5, 0, 0.5, 0)
+	guiObject.Position = UDim2.new(0.5, 0, -5, 0)
+
 	local tweenInfo = TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-
-	local tween = TweenService:Create(guiObject, tweenInfo, {Position = targetPos})
+	local tween = TweenService:Create(guiObject, tweenInfo, {Position = UDim2.new(0.5, 0, 0.5, 0)})
+	activeTweens[guiObject] = tween
 	tween:Play()
+	tween.Completed:Connect(function()
+		activeTweens[guiObject] = nil
+	end)
 end
 
 function module.TweenInactive(guiObject: GuiObject)
+	local TweenService = game:GetService("TweenService")
+	guiObject = resolveGuiObject(guiObject)
+	if not guiObject then return end
+
 	local blur = game.Lighting:FindFirstChild("UIBlur")
 	if blur then
 		blur.Enabled = false
 	end
 
-	if not guiObject then return end
-	local TweenService = game:GetService("TweenService")
+	if activeTweens[guiObject] then
+		activeTweens[guiObject]:Cancel()
+		activeTweens[guiObject] = nil
+	end
 
-	local targetPos = UDim2.new(0.5, 0, -5, 0)
 	local tweenInfo = TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-
-	local tween = TweenService:Create(guiObject, tweenInfo, {Position = targetPos})
+	local tween = TweenService:Create(guiObject, tweenInfo, {Position = UDim2.new(0.5, 0, -5, 0)})
+	activeTweens[guiObject] = tween
 	tween:Play()
+	tween.Completed:Connect(function()
+		activeTweens[guiObject] = nil
+	end)
 end
+
 
 function module.HoverTweenPopSound(guiObject: GuiObject)
 	if not guiObject then return end

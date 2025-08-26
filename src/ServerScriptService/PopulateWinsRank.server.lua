@@ -16,18 +16,15 @@ local function GetAllWins()
 	if success and pages then
 		local data = pages:GetCurrentPage()
 		for _, entry in pairs(data) do
-			-- ensure userId is numeric when possible
 			local rawKey = entry.key
 			local userId = tonumber(rawKey) or rawKey
 			local wins = entry.value
 
-			-- try to get the username safely
 			local username
 			local okName, nameErr = pcall(function()
 				username = Players:GetNameFromUserIdAsync(userId)
 			end)
 			if not okName then
-				-- fallback to userId as string if name lookup fails
 				username = tostring(userId)
 			end
 
@@ -62,7 +59,6 @@ local function UpdateLeaderboard()
 					local playerWins:TextLabel = frame:FindFirstChild("3PlayerCheckpoint")
 
 					if playerImage then
-						-- ensure UserId is numeric for the thumbnail call
 						local uid = tonumber(data.UserId) or data.UserId
 						local okThumb, thumb = pcall(function()
 							return Players:GetUserThumbnailAsync(uid, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
@@ -75,7 +71,6 @@ local function UpdateLeaderboard()
 					end
 
 					if playerName then
-						-- if data.Player is a Player instance use its Name, otherwise it's already a username string
 						playerName.Text = tostring((type(data.Player) == "userdata" and data.Player.Name) or data.Player)
 					end
 
@@ -84,14 +79,13 @@ local function UpdateLeaderboard()
 						playerWins.Text = tostring(playerwinsFromatted)
 					end
 				else
-					-- clear if there is no data for that position
 					local playerImage:ImageLabel = frame:FindFirstChild("1PlayerThumbnail")
 					local playerName:TextLabel = frame:FindFirstChild("2PlayerName")
 					local playerWins:TextLabel = frame:FindFirstChild("3PlayerCheckpoint")
 
 					if playerImage then playerImage.Image = "" end
-					if playerName then playerName.Text = "N/A" end
-					if playerWins then playerWins.Text = "0" end
+					if playerName then playerName.Text = "Loading..." end
+					if playerWins then playerWins.Text = "Loading..." end
 				end
 			end
 		end
