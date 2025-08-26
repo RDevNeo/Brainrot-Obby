@@ -26,6 +26,8 @@ local ownedPetsDataStore = DataStoreService:GetDataStore("OwnedPetsData_V2")
 local goldenCoinsDataStore = DataStoreService:GetDataStore("GoldenCoinsData_V2")
 local petMutationsDataStore = DataStoreService:GetDataStore("PetMutationsData_V2")
 local badgeDataStore = DataStoreService:GetDataStore("PlayerBadges_V2")
+local leaderboardCoinsDataStore = DataStoreService:GetOrderedDataStore("LeaderboardCoins_V2")
+local leaderboardWinsDataStore = DataStoreService:GetOrderedDataStore("LeaderboardWins_V2")
 
 -- Server memory
 local playerOwnedItems = {}
@@ -222,6 +224,7 @@ local function SavePlayerData(player)
 	if coins then
 		pcall(function()
 			coinsDataStore:SetAsync(player.UserId, coins.Value)
+			leaderboardCoinsDataStore:SetAsync(player.UserId, coins.Value) -- Save to ordered data store
 		end)
 	end
 
@@ -236,6 +239,7 @@ local function SavePlayerData(player)
 	if Wins then
 		pcall(function()
 			WinsDataStore:SetAsync(player.UserId, Wins.Value)
+			leaderboardWinsDataStore:SetAsync(player.UserId, Wins.Value) -- Save to ordered data store
 		end)
 	end
 
@@ -406,7 +410,12 @@ function module.AddWins(player, amount)
 	local leaderstats = player:FindFirstChild("leaderstats")
 	if leaderstats then
 		local Wins = leaderstats:FindFirstChild("Wins")
-		if Wins then Wins.Value = Wins.Value + amount end
+		if Wins then 
+			Wins.Value = Wins.Value + amount 
+			pcall(function()
+				leaderboardWinsDataStore:SetAsync(player.UserId, Wins.Value)
+			end)
+		end
 	end
 end
 

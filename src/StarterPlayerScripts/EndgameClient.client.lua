@@ -114,28 +114,30 @@ StartEndGameAnimation.OnClientEvent:Connect(function()
 	WinsButtonFadeIn:Play()
 	NoWinsButtonFadeIn:Play()
 
-	local function handleButtonClick(button, event)
-		button.Interactable = false
-		WinsButton.Interactable = false
-		NoWinsButton.Interactable = false
+	-- Connections for the buttons are now at the top level
+end)
 
-		WinsButtonFadeOut:Play()
-		NoWinsButtonFadeOut:Play()
+local function handleButtonClick(button, event)
+	button.Interactable = false
+	WinsButton.Interactable = false
+	NoWinsButton.Interactable = false
 
-		HelperModule.EnableAllUIs()
-		enableMovement()
-		blackScreenFade:Play()
-		blackScreenFade.Completed:Wait()
-		isEndgameActive = false
+	WinsButtonFadeOut:Play()
+	NoWinsButtonFadeOut:Play()
 
-		event:FireServer()
-	end
+	HelperModule.EnableAllUIs()
+	enableMovement()
+	blackScreenFade:Play()
+	blackScreenFade.Completed:Wait()
+	isEndgameActive = false
 
-	NoWinsButton.MouseButton1Click:Connect(function()
-		handleButtonClick(NoWinsButton, NoWinsEvent)
-	end)
+	event:FireServer()
+end
 
-	WinsButton.MouseButton1Click:Connect(function()
-		handleButtonClick(WinsButton, WinsEvent)
-	end)
+NoWinsButton.MouseButton1Click:Connect(function()
+	handleButtonClick(NoWinsButton, NoWinsEvent)
+end)
+
+WinsButton.MouseButton1Click:Connect(function()
+	handleButtonClick(WinsButton, WinsEvent)
 end)
