@@ -12,7 +12,6 @@ WinsEvent.OnServerEvent:Connect(function(player)
 		
 		DataStore.AddWins(player, 1)
 		DataStore.SetCheckpoint(player, 1)
-		DataStore.RemoveAllPets(player)
 		DataStore.AddGoldenCoins(player, 1)
 		
 		humanoidRootPart.CFrame = CP1.CFrame + Vector3.new(0, 5, 0)

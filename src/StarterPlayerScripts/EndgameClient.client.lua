@@ -7,6 +7,7 @@ local HelperModule = require(ReplicatedStorage.Helper)
 
 local TimeBetweenPhrases = 2
 local skipDialogue = false
+local isEndgameActive = false
 
 local WinsEvent = ReplicatedStorage.Remotes.UI.WinsButton
 local NoWinsEvent = ReplicatedStorage.Remotes.UI.noWinsButton
@@ -71,6 +72,9 @@ SkipDialongButton.MouseButton1Click:Connect(function()
 end)
 
 StartEndGameAnimation.OnClientEvent:Connect(function()
+	if isEndgameActive then return end
+	isEndgameActive = true
+
 	HelperModule.DisableAllUIs()
 	disableMovement()
 	skipDialogue = false
@@ -121,6 +125,8 @@ StartEndGameAnimation.OnClientEvent:Connect(function()
 		HelperModule.EnableAllUIs()
 		enableMovement()
 		blackScreenFade:Play()
+		blackScreenFade.Completed:Wait()
+		isEndgameActive = false
 
 		event:FireServer()
 	end

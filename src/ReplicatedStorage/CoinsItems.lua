@@ -55,7 +55,7 @@ itemsData.Items = {
 		name = "Rainbow Carpet",
 		description = "Is that anything more OP than flying in a obby?",
 		imageId = "rbxassetid://4006230910",
-		price = 1000,
+		price = 2000,
 	},
 }
 
