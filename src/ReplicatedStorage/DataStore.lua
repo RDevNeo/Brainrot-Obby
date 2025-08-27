@@ -1,4 +1,3 @@
--- Full Player Data + Pet Mutations Module (wait-for-Pets robustness + clearer apply logs)
 local Players = game:GetService("Players")
 local DataStoreService = game:GetService("DataStoreService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,8 +16,6 @@ end
 
 local module = {}
 
--- DataStores
-local coinsDataStore = DataStoreService:GetDataStore("CoinsData_V2")
 local itemsDataStore = DataStoreService:GetDataStore("PurchasedItems_V2")
 local checkpointDataStore = DataStoreService:GetDataStore("CheckpointData_V2")
 local WinsDataStore = DataStoreService:GetDataStore("WinsData_V2")
@@ -37,7 +34,6 @@ local playerGoldenCoins = {}
 local playerPetMutations = {}
 local playerDataLoaded = {}
 
--- Helper: wait for a child in ReplicatedStorage (non-blocking but bounded)
 local function waitForReplicatedChild(name, timeout)
 	timeout = timeout or 5
 	local start = tick()
@@ -131,16 +127,6 @@ local function LoadPlayerData(player)
 	checkpoint.Value = 0
 	checkpoint.Parent = leaderstats
 
-	local coins = Instance.new("IntValue")
-	coins.Name = "Coins"
-	coins.Parent = leaderstats
-
-	-- Load coins
-	local success, coinData = pcall(function()
-		return coinsDataStore:GetAsync(player.UserId)
-	end)
-	coins.Value = (success and coinData) or 0
-
 	-- Load checkpoint
 	local successCheckpoint, checkpointData = pcall(function()
 		return checkpointDataStore:GetAsync(player.UserId)
@@ -220,14 +206,6 @@ local function SavePlayerData(player)
 	local leaderstats = player:FindFirstChild("leaderstats")
 	if not leaderstats then return end
 
-	local coins = leaderstats:FindFirstChild("Coins")
-	if coins then
-		pcall(function()
-			coinsDataStore:SetAsync(player.UserId, coins.Value)
-			leaderboardCoinsDataStore:SetAsync(player.UserId, coins.Value) -- Save to ordered data store
-		end)
-	end
-
 	local checkpoint = leaderstats:FindFirstChild("Checkpoint")
 	if checkpoint then
 		pcall(function()
@@ -273,62 +251,6 @@ local function SavePlayerData(player)
 	playerPetMutations[player.UserId] = nil
 
 	playerDataLoaded[player.UserId] = nil
-end
-
--- -------------------------
--- Utilities / currency
--- -------------------------
-function module.AddCoins(player, quantity)
-	local leaderstats = player:FindFirstChild("leaderstats")
-	if not leaderstats then return 0 end
-
-	local coins = leaderstats:FindFirstChild("Coins")
-	local Wins = leaderstats:FindFirstChild("Wins")
-	if not coins then return 0 end
-
-	local friendCount = 0
-	if HelperModule and HelperModule.CountFriendsInServer then
-		friendCount = HelperModule.CountFriendsInServer(player)
-	end
-	local friendBonus = 0.10 * friendCount
-
-	local WinsBonus = 0
-	if Wins and Wins.Value > 0 then
-		WinsBonus = 0.10 * Wins.Value
-	end
-
-	local mutationBonus = module.CalculateMutationBonus(player)
-
-	local total = math.floor(quantity * (1 + friendBonus + WinsBonus + mutationBonus))
-
-	coins.Value = coins.Value + total
-
-	return total
-end
-
-function module.RemoveCoins(player, quantity)
-	local leaderstats = player:FindFirstChild("leaderstats")
-	if leaderstats then
-		local coins = leaderstats:FindFirstChild("Coins")
-		if coins then coins.Value = coins.Value - quantity end
-	end
-end
-
-function module.SetCoins(player, value)
-	local leaderstats = player:FindFirstChild("leaderstats")
-	if leaderstats then
-		local coins = leaderstats:FindFirstChild("Coins")
-		if coins then coins.Value = value end
-	end
-end
-
-function module.GetPlayerCoins(player)
-	local leaderstats = player:FindFirstChild("leaderstats")
-	if leaderstats then
-		local coins = leaderstats:FindFirstChild("Coins")
-		return coins and coins.Value or 0
-	end
-	return 0
 end
 
 function module.AddGoldenCoins(player, quantity)
