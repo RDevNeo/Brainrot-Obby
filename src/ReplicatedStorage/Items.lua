@@ -12,14 +12,14 @@ itemsData.Items = {
 	["Speed Coil"] = {
 		name = "Speed Coil",
 		description = "Zoom around the parkour with additional speed!",
-		imageId = "rbxassetid://137030347246747",
+		imageId = "rbxassetid://139648459528290",
 		gamepassId = 1423181006,
 	},
 
 
 	["Grapple Hook"] = {
 		name = "Grapple Hook",
-		description = "Throw a grapper to go there.!",
+		description = "Throw a grapper to go there!",
 		imageId = "rbxassetid://92253928404549",
 		gamepassId = 1424187201,
 	},
@@ -34,7 +34,7 @@ itemsData.Items = {
 	["Fusion Coil"] = {
 		name = "Fusion Coil",
 		description = "Speed and Gravity combined, what is the result of this?",
-		imageId = "rbxassetid://139648459528290",
+		imageId = "rbxassetid://137030347246747",
 		gamepassId = 1403795030,
 	},
 	

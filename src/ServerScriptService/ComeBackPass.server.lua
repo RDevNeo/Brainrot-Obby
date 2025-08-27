@@ -11,19 +11,7 @@ local PRODUCT_ID = 3384036706
 
 local purchasingPlayers = {}
 
-local function OnPromptProductPurchaseFinished(userId, productId, isPurchased) 
-	local player = Players:GetPlayerByUserId(userId)
-	if player and purchasingPlayers[userId] then
-		if isPurchased then
-			TeleportPlayerToCheckpoint(player, player:FindFirstChild("LastCheckpoint").Value)
-		else
-			TeleportPlayerToSpawn(player)
-			end
-		purchasingPlayers[userId] = nil
-	end
-end
 
-MarketplaceService.PromptProductPurchaseFinished:Connect(OnPromptProductPurchaseFinished)
 
 local function GetCheckpointPart(checkpointNumber)
 	local checkpointModel = checkpointsFolder:FindFirstChild(tostring(checkpointNumber))
@@ -50,6 +38,20 @@ local function TeleportPlayerToCheckpoint(player, checkpointNumber)
 		TeleportPlayerToSpawn(player)
 	end
 end
+
+local function OnPromptProductPurchaseFinished(userId, productId, isPurchased) 
+	local player = Players:GetPlayerByUserId(userId)
+	if player and purchasingPlayers[userId] then
+		if isPurchased then
+			TeleportPlayerToCheckpoint(player, player:FindFirstChild("LastCheckpoint").Value)
+		else
+			TeleportPlayerToSpawn(player)
+		end
+		purchasingPlayers[userId] = nil
+	end
+end
+
+MarketplaceService.PromptProductPurchaseFinished:Connect(OnPromptProductPurchaseFinished)
 
 SpecialPart.Touched:Connect(function(hit)
 	local player = Players:GetPlayerFromCharacter(hit.Parent)
