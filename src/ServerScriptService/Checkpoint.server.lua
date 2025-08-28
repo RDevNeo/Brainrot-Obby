@@ -3,7 +3,6 @@ local checkpointFolder = workspace:WaitForChild("CheckPoints")
 local rs = game:GetService("ReplicatedStorage")
 local CheckpointEvent = rs.Remotes.Checkpoint.CheckpointTouch
 local CheckpointNotifier = rs.Remotes.Checkpoint.CheckpointNotifier
-local CoinsUIEvent = rs.Remotes.UI.ShowCoinsUI
 local ds = require(rs.DataStore)
 
 local CoinsQuantity = 10
@@ -18,9 +17,6 @@ local function onCheckpointTouched(player, checkpoint)
 
 	ds.SetCheckpoint(player, checkpointNumber)
 
-
-	local coinsAdded = ds.AddCoins(player, CoinsQuantity)
-	CoinsUIEvent:FireClient(player, coinsAdded)
 
 	CheckpointNotifier:FireClient(player)
 	CheckpointEvent:Fire(checkpoint, player)

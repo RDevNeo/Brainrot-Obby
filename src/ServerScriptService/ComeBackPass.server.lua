@@ -1,85 +1,146 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local MarketplaceService = game:GetService("MarketplaceService")
-local RunService = game:GetService("RunService")
+local GlobalMessagesEvent = game.ReplicatedStorage.Remotes.GlobalMessages
 local ds = require(ReplicatedStorage.DataStore)
 
 local SpecialPart:BasePart = game.Workspace.BacktoSpawn.Part
 local checkpointsFolder = game.Workspace.CheckPoints
 
 local PRODUCT_ID = 3384036706
-
 local purchasingPlayers = {}
 
-
-
 local function GetCheckpointPart(checkpointNumber)
-	local checkpointModel = checkpointsFolder:FindFirstChild(tostring(checkpointNumber))
-	if checkpointModel and checkpointModel:IsA("Model") then
-		return checkpointModel.PrimaryPart
+	local model = checkpointsFolder:FindFirstChild(tostring(checkpointNumber))
+	if model and model:IsA("Model") and model.PrimaryPart then
+		return model.PrimaryPart
 	end
 	return nil
 end
 
-local function TeleportPlayerToSpawn(player)
-	local spawnCheckpoint = GetCheckpointPart(1)
-	if spawnCheckpoint and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-		player.Character.HumanoidRootPart.CFrame = spawnCheckpoint.CFrame + Vector3.new(0, 5, 0)
+local function SafeTeleport(player, targetCFrame)
+	if not player.Character then return end
+	local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+	hrp.CFrame = targetCFrame + Vector3.new(0, 5, 0)
+end
+
+local function TeleportToSpawn(player)
+	local spawnPart = GetCheckpointPart(1)
+	if spawnPart then
+		SafeTeleport(player, spawnPart.CFrame)
 	else
 		player:LoadCharacter()
 	end
 end
 
-local function TeleportPlayerToCheckpoint(player, checkpointNumber)
+local function TeleportToCheckpoint(player, checkpointNumber)
 	local checkpointPart = GetCheckpointPart(checkpointNumber)
 	if checkpointPart then
-		player.Character:SetPrimaryPartCFrame(checkpointPart.CFrame + Vector3.new(0, 5, 0))
+		SafeTeleport(player, checkpointPart.CFrame)
 	else
-		TeleportPlayerToSpawn(player)
+		TeleportToSpawn(player)
 	end
 end
 
-local function OnPromptProductPurchaseFinished(userId, productId, isPurchased) 
-	local player = Players:GetPlayerByUserId(userId)
-	if player and purchasingPlayers[userId] then
-		if isPurchased then
-			TeleportPlayerToCheckpoint(player, player:FindFirstChild("LastCheckpoint").Value)
+function MarketplaceService.ProcessReceipt(receiptInfo)
+	local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
+	if not player then
+		return Enum.ProductPurchaseDecision.NotProcessedYet
+	end
+
+	if receiptInfo.ProductId == PRODUCT_ID then
+		GlobalMessagesEvent:FireClient(player, PRODUCT_ID)
+		
+		purchasingPlayers[player.UserId] = nil  
+	
+		local lastCheckpoint = player:FindFirstChild("LastCheckpoint")
+		if lastCheckpoint then
+			local cp = lastCheckpoint.Value
+	
+			if cp <= 1 then
+				TeleportToSpawn(player)
+			else
+				TeleportToCheckpoint(player, cp)
+			end
 		else
-			TeleportPlayerToSpawn(player)
+			TeleportToSpawn(player)
 		end
-		purchasingPlayers[userId] = nil
 	end
+
+	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
 
-MarketplaceService.PromptProductPurchaseFinished:Connect(OnPromptProductPurchaseFinished)
+MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, productId, isPurchased)
+	if productId ~= PRODUCT_ID then return end
+	
+	local player = Players:GetPlayerByUserId(userId)
+	if not player then 
+		print("Player not found for userId:", userId)
+		return 
+	end
+	
+	local purchaseData = purchasingPlayers[userId]
+	if not purchaseData then
+		purchaseData = { timedOut = true, completed = false }
+	end
+	
+	if isPurchased then
+		purchaseData.completed = true
+		purchasingPlayers[userId] = nil
+		
+		GlobalMessagesEvent:FireClient(player, PRODUCT_ID)
+		
+		local lastCheckpoint = player:FindFirstChild("LastCheckpoint")
+		if lastCheckpoint then
+			local cp = lastCheckpoint.Value
+	
+			if cp <= 1 then
+				TeleportToSpawn(player)
+			else
+				TeleportToCheckpoint(player, cp)
+			end
+		else
+			TeleportToSpawn(player)
+		end
+	else
+		if not purchaseData.timedOut then
+			purchasingPlayers[userId] = nil
+			TeleportToSpawn(player)
+		end
+	end
+end)
 
 SpecialPart.Touched:Connect(function(hit)
 	local player = Players:GetPlayerFromCharacter(hit.Parent)
-	if player then
-		local lastCheckpointValue = player:FindFirstChild("LastCheckpoint")
-		if not lastCheckpointValue then return end
+	if not player then return end
 
-		if lastCheckpointValue.Value == 0 or lastCheckpointValue.Value == 1 then
-			TeleportPlayerToSpawn(player)
-			return
-		end
+	local lastCheckpoint = player:FindFirstChild("LastCheckpoint")
+	if not lastCheckpoint then return end
 
-		local success, result = pcall(function()
-			return MarketplaceService:PromptProductPurchase(player, PRODUCT_ID)
+	if lastCheckpoint.Value == 0 or lastCheckpoint.Value == 1 then
+		TeleportToSpawn(player)
+		return
+	end
+
+	if not purchasingPlayers[player.UserId] then
+		purchasingPlayers[player.UserId] = {
+			checkpointValue = lastCheckpoint.Value,
+			timedOut = false,
+			completed = false
+		}
+		
+		MarketplaceService:PromptProductPurchase(player, PRODUCT_ID)
+
+		task.delay(5, function()
+			local purchaseData = purchasingPlayers[player.UserId]
+			if not purchaseData then return end
+
+			if not purchaseData.completed then
+				purchaseData.timedOut = true
+				TeleportToSpawn(player)
+			end
 		end)
-
-		if success then
-			purchasingPlayers[player.UserId] = false
-			task.delay(2.5, function()
-				if purchasingPlayers[player.UserId] == false then
-					TeleportPlayerToSpawn(player)
-				end
-				purchasingPlayers[player.UserId] = nil
-			end)
-		else
-			warn("Error prompting product purchase:", result)
-			TeleportPlayerToSpawn(player)
-		end
 	end
 end)
 
@@ -90,16 +151,16 @@ local function SetupCheckpointListeners()
 				if part:IsA("BasePart") then
 					part.Touched:Connect(function(hit)
 						local player = Players:GetPlayerFromCharacter(hit.Parent)
-
 						if player then
-							local gamePassLastCheckpointValue = player:FindFirstChild("LastCheckpoint")
-							if not gamePassLastCheckpointValue then return end
+							local lastCheckpoint = player:FindFirstChild("LastCheckpoint")
+							if not lastCheckpoint then return end
 
-							local actualCurrentCheckpoint = ds.GetCheckpoint(player)
+							local actualCheckpoint = ds.GetCheckpoint(player)
 							local touchedCheckpoint = tonumber(model.Name)
 
-							if touchedCheckpoint <= (actualCurrentCheckpoint + 1) and touchedCheckpoint > gamePassLastCheckpointValue.Value then
-								gamePassLastCheckpointValue.Value = touchedCheckpoint
+							if touchedCheckpoint <= (actualCheckpoint + 1)
+								and touchedCheckpoint > lastCheckpoint.Value then
+								lastCheckpoint.Value = touchedCheckpoint
 							end
 						end
 					end)
@@ -110,10 +171,14 @@ local function SetupCheckpointListeners()
 end
 
 Players.PlayerAdded:Connect(function(player)
-	local lastCheckpointValue = Instance.new("NumberValue")
-	lastCheckpointValue.Name = "LastCheckpoint"
-	lastCheckpointValue.Value = 0
-	lastCheckpointValue.Parent = player
+	local lastCheckpoint = Instance.new("NumberValue")
+	lastCheckpoint.Name = "LastCheckpoint"
+	lastCheckpoint.Value = 0
+	lastCheckpoint.Parent = player
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+	purchasingPlayers[player.UserId] = nil
 end)
 
 SetupCheckpointListeners()

@@ -4,36 +4,21 @@ local player = Players.LocalPlayer
 
 local GetPlayerPetsRF = ReplicatedStorage:WaitForChild("GetPlayerPets")
 local NewPetEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("NewPet")
-local WinsShowPets = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Pets"):WaitForChild("WinsShowPets")
 local UIModule = require(ReplicatedStorage.UI)
-
-local PetsModelRP = ReplicatedStorage:FindFirstChild("PetsModelFolder")
-if not PetsModelRP then
-	PetsModelRP = Instance.new("Folder")
-	PetsModelRP.Name = "PetsModelFolder"
-	PetsModelRP.Parent = ReplicatedStorage
-end
 
 local currentPlayerPets = {}
 
 local function movePetToClient(petName)
-	if not petName or petName == "" then  
-		return false 
-	end
+	if not petName or petName == "" then return false end
 
-	if PetsModelRP:FindFirstChild(petName) then 
-		return true	
-	end
 
 	local allPetsModelWK = game.Workspace:FindFirstChild("AllPetsModels") 
-	if not allPetsModelWK then 
-		return false 
-	end
+	if not allPetsModelWK then return false end
 
 	local petModel = allPetsModelWK:FindFirstChild(petName)
 	if petModel and petModel:IsA("Model") then
 		local success = pcall(function()
-			petModel.Parent = PetsModelRP
+			petModel:Destroy()
 		end)
 
 		if success then
@@ -41,56 +26,20 @@ local function movePetToClient(petName)
 		else 
 			return false
 		end
-	else 
-		return false
 	end
 end
 
-local function movePetBackToWorkspace(petName)
-	if not petName or petName == "" then
-		return false
-	end
 
-	local allPetsModelWK = game.Workspace:FindFirstChild("AllPetsModels")
-	if not allPetsModelWK then
-		warn("AllPetsModels folder not found in Workspace")
-		return false
-	end
-
-	if allPetsModelWK:FindFirstChild(petName) then
-		return true
-	end
-
-	local petModel = PetsModelRP:FindFirstChild(petName)
-	if petModel and petModel:IsA("Model") then
-		local success = pcall(function()
-			petModel.Parent = allPetsModelWK
-		end)
-
-		if success then
-			return true
-		else
-			warn("Failed to move pet '" .. petName .. "' back to Workspace")
-			return false
-		end
-	else
-		return true
-	end
-end
 
 local function moveAllOwnedPetsToClient()
 	local allPetsModelWK = game.Workspace:WaitForChild("AllPetsModels", 10)
-	if not allPetsModelWK then 	
-		return false	
-	end
+	if not allPetsModelWK then return false end
 
 	local success, playerPets = pcall(function()
 		return GetPlayerPetsRF:InvokeServer()
 	end)
 
-	if not success or not playerPets then 
-		return false 
-	end
+	if not success or not playerPets then warn("[PetHandlerClient] Failed to retrieve player pets from server or no pets found.") return false end
 
 	for _, petName in pairs(playerPets) do
 		movePetToClient(petName)
@@ -100,20 +49,7 @@ local function moveAllOwnedPetsToClient()
 	return true
 end
 
-local function moveAllPetsBackToWorkspace()
-	local petsToMove = {}
-	for _, pet in pairs(PetsModelRP:GetChildren()) do
-		if pet:IsA("Model") then
-			table.insert(petsToMove, pet.Name)
-		end
-	end
 
-	for _, petName in pairs(petsToMove) do
-		movePetBackToWorkspace(petName)
-	end
-
-	currentPlayerPets = {}
-end
 
 NewPetEvent.OnClientEvent:Connect(function(petName)
 	if movePetToClient(petName) then
@@ -126,26 +62,13 @@ NewPetEvent.OnClientEvent:Connect(function(petName)
 	UIModule.PlayPetSound(petName)
 end)
 
-WinsShowPets.OnClientEvent:Connect(function()
-	moveAllPetsBackToWorkspace()
-end)
-
 local function onCharacterAdded(character)
-	local humanoid = character:FindFirstChildOfClass("Humanoid") or character:WaitForChild("Humanoid", 10)
-	if humanoid then
-		humanoid.Died:Connect(function()
-			pcall(moveAllPetsBackToWorkspace)
-		end)
-	end
-
 	task.delay(0.8, function()
 		pcall(moveAllOwnedPetsToClient)
 	end)
 end
 
-local function onCharacterRemoving()
-	pcall(moveAllPetsBackToWorkspace)
-end
+
 
 local function waitForDataAndMovePets()
 	local leaderstats = player:WaitForChild("leaderstats", 15)
@@ -160,10 +83,4 @@ end
 task.spawn(waitForDataAndMovePets)
 
 player.CharacterAdded:Connect(onCharacterAdded)
-player.CharacterRemoving:Connect(onCharacterRemoving)
 
-Players.PlayerRemoving:Connect(function(plr)
-	if plr == player then
-		pcall(moveAllPetsBackToWorkspace)
-	end
-end)

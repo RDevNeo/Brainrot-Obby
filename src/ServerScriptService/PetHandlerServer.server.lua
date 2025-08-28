@@ -200,9 +200,9 @@ local function loadPlayerPets(player)
 					else
 						warn("[PetHandler] Failed to clone physical pet '" .. tostring(petname) .. "' for " .. tostring(player.Name))
 					end
+					end
 				end
 			end
-		end
 	else
 		warn("[PetHandler] PhysicalPets folder missing; cannot load physical pets for " .. tostring(player.Name))
 	end

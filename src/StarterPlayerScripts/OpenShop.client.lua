@@ -1,4 +1,4 @@
-local UIEvent = game.ReplicatedStorage.Remotes.UI.UICoin
+local UIEvent = game.ReplicatedStorage.Remotes.UI.OpenShop
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 local ShopContainer = PlayerGui:WaitForChild("Shop")

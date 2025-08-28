@@ -10,7 +10,6 @@ local skipDialogue = false
 local isEndgameActive = false
 
 local WinsEvent = ReplicatedStorage.Remotes.UI.WinsButton
-local NoWinsEvent = ReplicatedStorage.Remotes.UI.noWinsButton
 
 local phrases = {
 	"This journey have been great..",
@@ -26,11 +25,9 @@ local canvas = screenGui:WaitForChild("NotCanvas")
 local blackScreen = canvas:WaitForChild("BlackScreen")
 local phrasesText = canvas:WaitForChild("Phrases")
 local WinsButton:TextButton = canvas:WaitForChild("Wins")
-local NoWinsButton:TextButton = canvas:WaitForChild("noWins")
 local SkipDialongButton:TextButton = canvas:WaitForChild("Skip")
 
 WinsButton.Interactable = false
-NoWinsButton.Interactable = false
 
 local blackScreenTween = TweenService:Create(blackScreen, TweenInfo.new(1), {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 0})
 local blackScreenFade  = TweenService:Create(blackScreen, TweenInfo.new(1), {BackgroundTransparency = 1})
@@ -41,16 +38,11 @@ local phrasesFade      = TweenService:Create(phrasesText, TweenInfo.new(1), {Tex
 local WinsButtonFadeIn  = TweenService:Create(WinsButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
 local WinsButtonFadeOut = TweenService:Create(WinsButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
 
-local NoWinsButtonFadeIn  = TweenService:Create(NoWinsButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
-local NoWinsButtonFadeOut = TweenService:Create(NoWinsButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
-
 local SkipButtonFadeIn = TweenService:Create(SkipDialongButton, TweenInfo.new(1), {TextTransparency = 0, BackgroundTransparency = 0})
 local SkipButtonFadeOut = TweenService:Create(SkipDialongButton, TweenInfo.new(1), {TextTransparency = 1, BackgroundTransparency = 1})
 
 WinsButtonFadeIn.Completed:Connect(function() WinsButton.Interactable = true end)
 WinsButtonFadeOut.Completed:Connect(function() WinsButton.Interactable = false end)
-NoWinsButtonFadeIn.Completed:Connect(function() NoWinsButton.Interactable = true end)
-NoWinsButtonFadeOut.Completed:Connect(function() NoWinsButton.Interactable = false end)
 
 local function disableMovement()
 	ContextActionService:BindAction(
@@ -112,18 +104,14 @@ StartEndGameAnimation.OnClientEvent:Connect(function()
 	SkipDialongButton.Interactable = false
 
 	WinsButtonFadeIn:Play()
-	NoWinsButtonFadeIn:Play()
 
-	-- Connections for the buttons are now at the top level
 end)
 
 local function handleButtonClick(button, event)
 	button.Interactable = false
 	WinsButton.Interactable = false
-	NoWinsButton.Interactable = false
 
 	WinsButtonFadeOut:Play()
-	NoWinsButtonFadeOut:Play()
 
 	HelperModule.EnableAllUIs()
 	enableMovement()
@@ -133,10 +121,6 @@ local function handleButtonClick(button, event)
 
 	event:FireServer()
 end
-
-NoWinsButton.MouseButton1Click:Connect(function()
-	handleButtonClick(NoWinsButton, NoWinsEvent)
-end)
 
 WinsButton.MouseButton1Click:Connect(function()
 	handleButtonClick(WinsButton, WinsEvent)

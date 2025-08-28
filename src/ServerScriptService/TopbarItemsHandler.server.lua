@@ -2,6 +2,7 @@ local TopbarItemsModule = require(game.ReplicatedStorage.TopBarItems)
 local MarketplaceService = game:GetService("MarketplaceService")
 local TopbarItems = TopbarItemsModule.Items
 local Event = game.ReplicatedStorage.Remotes.BoughtTopbarButtons
+local GlobalMessagesEvent = game.ReplicatedStorage.Remotes.GlobalMessages
 local DataStore = require(game.ReplicatedStorage.DataStore)
 
 Event.OnServerEvent:Connect(function(player, name)
@@ -24,6 +25,7 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		for _, plr in pairs(game.Players:GetPlayers()) do
 			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 				plr.Character.HumanoidRootPart.CFrame = game.Workspace.CheckPoints:FindFirstChild("1").PrimaryPart.CFrame + Vector3.new(0, 3, 0)
+				GlobalMessagesEvent:FireClient(player, productId)
 			end
 		end
 
@@ -36,8 +38,8 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		if checkpointsFolder and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
 			local checkpointModel = checkpointsFolder:FindFirstChild(tostring(nextCheckpoint))
 			if checkpointModel and checkpointModel.PrimaryPart then
-				player.Character.HumanoidRootPart.CFrame =
-					checkpointModel.PrimaryPart.CFrame + Vector3.new(0, 3, 0)
+				player.Character.HumanoidRootPart.CFrame = checkpointModel.PrimaryPart.CFrame + Vector3.new(0, 3, 0)
+				GlobalMessagesEvent:FireClient(player, productId)
 			end
 		end
 
@@ -49,8 +51,8 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		if checkpointsFolder and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
 			local checkpointModel = checkpointsFolder:FindFirstChild(tostring(toGoCheckpoint))
 			if checkpointModel and checkpointModel.PrimaryPart then
-				player.Character.HumanoidRootPart.CFrame =
-					checkpointModel.PrimaryPart.CFrame + Vector3.new(0, 3, 0)
+				player.Character.HumanoidRootPart.CFrame = checkpointModel.PrimaryPart.CFrame + Vector3.new(0, 3, 0)
+				GlobalMessagesEvent:FireClient(player, productId)
 			end
 		end
 	end
