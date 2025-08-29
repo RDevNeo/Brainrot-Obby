@@ -32,6 +32,8 @@
         "$properties": {
           "Anchored": true,
           "CanCollide": false,
+          "CanQuery": false,
+          "CanTouch": false,
           "Transparency": 1,
           "Color": [
             0.38823,

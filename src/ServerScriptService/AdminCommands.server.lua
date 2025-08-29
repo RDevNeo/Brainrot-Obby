@@ -1,6 +1,7 @@
 local rs = game:GetService("ReplicatedStorage")
 local event = rs.Remotes.UI.ResetPlayerData
 local ds = require(rs.DataStore)
+local helperModule = require(game.ReplicatedStorage.Helper)
 
 event.OnServerEvent:Connect(function(player:Player, whatToReset:string)
 	local resetNumber = 0 
@@ -8,19 +9,10 @@ event.OnServerEvent:Connect(function(player:Player, whatToReset:string)
 	if whatToReset == "Checkpoint" then
 		ds.SetCheckpoint(player, 1)
 		
-	elseif whatToReset == "Coins" then
-		ds.SetCoins(player, resetNumber)
-		
-	elseif whatToReset == "Pets" then
-		ds.RemoveAllPets(player)
-		
-	elseif whatToReset == "All" then
-		ds.SetCheckpoint(player, 1)
-		ds.SetCoins(player, resetNumber)
-		ds.RemoveAllPets(player)
-		ds.SetWins(player, 0)
-		
 	elseif whatToReset == "MaxCheckpoint" then
-		ds.SetCheckpoint(player, 30)
+		ds.SetCheckpoint(player, helperModule.GetAllCheckpoints())
+		
+	elseif whatToReset == "RemovePets" then
+		ds.RemoveAllPets(player)
 	end
 end)

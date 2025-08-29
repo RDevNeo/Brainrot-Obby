@@ -153,109 +153,109 @@ checkpointsData.checkpoints = {
 		checkpoint = 30,
 	},
 	
-	["31"] = {name = "Agarrini la Palini", imageId = nil, checkpoint = 31},
+	["31"] = {name = "Agarrini la Palini", imageId = "rbxassetid://99622038304719", checkpoint = 31},
 
-	["32"] = {name = "Avocadini Guffo", imageId = nil, checkpoint = 32},
+	["32"] = {name = "Avocadini Guffo", imageId = "rbxassetid://117862899532140", checkpoint = 32},
 
-	["33"] = {name = "Avocadorilla", imageId = nil, checkpoint = 33},
+	["33"] = {name = "Avocadorilla", imageId = "rbxassetid://97748377765338", checkpoint = 33},
 
-	["34"] = {name = "Ballerina Cappuccina", imageId = nil, checkpoint = 34},
+	["34"] = {name = "Ballerina Cappuccina", imageId = "rbxassetid://122812453018673", checkpoint = 34},
 
-	["35"] = {name = "Ballerino Lololo", imageId = nil, checkpoint = 35},
+	["35"] = {name = "Ballerino Lololo", imageId = "rbxassetid://115569353801198", checkpoint = 35},
 
-	["36"] = {name = "Bambini Crostini", imageId = nil, checkpoint = 36},
+	["36"] = {name = "Bambini Crostini", imageId = "rbxassetid://71706622075384", checkpoint = 36},
 
-	["37"] = {name = "Bananita Dolphinita", imageId = nil, checkpoint = 37},
+	["37"] = {name = "Bananita Dolphinita", imageId = "rbxassetid://98118758672882", checkpoint = 37},
 
-	["38"] = {name = "Bandito Bobritto", imageId = nil, checkpoint = 38},
+	["38"] = {name = "Bandito Bobritto", imageId = "rbxassetid://129294091610616", checkpoint = 38},
 
-	["39"] = {name = "Blueberrinni Octopusini", imageId = nil, checkpoint = 39},
+	["39"] = {name = "Blueberrinni Octopusini", imageId = "rbxassetid://75503621500252", checkpoint = 39},
 
-	["40"] = {name = "Burbaloni Loiloli", imageId = nil, checkpoint = 40},
+	["40"] = {name = "Burbaloni Loliloli", imageId = "rbxassetid://87251129702289", checkpoint = 40},
 
-	["41"] = {name = "Cacto Hipopotamo", imageId = nil, checkpoint = 41},
+	["41"] = {name = "Cacto Hipopotamo", imageId = "rbxassetid://91054978009308", checkpoint = 41},
 
-	["42"] = {name = "Cavallo Virtuoso", imageId = nil, checkpoint = 42},
+	["42"] = {name = "Cavallo Virtuoso", imageId = "rbxassetid://119980097435678", checkpoint = 42},
 
-	["43"] = {name = "Chef Crabracadabra", imageId = nil, checkpoint = 43},
+	["43"] = {name = "Chef Crabracadabra", imageId = "rbxassetid://81242466797204", checkpoint = 43},
 
-	["44"] = {name = "Chimpanzini Spiderini", imageId = nil, checkpoint = 44},
+	["44"] = {name = "Chimpanzini Spiderini", imageId = "rbxassetid://105949720878461", checkpoint = 44},
 
-	["45"] = {name = "Cocofanto Elefanto", imageId = nil, checkpoint = 45},
+	["45"] = {name = "Cocofanto Elefanto", imageId = "rbxassetid://116289594183632", checkpoint = 45},
 
-	["46"] = {name = "Dragon Cannelloni", imageId = nil, checkpoint = 46},
+	["46"] = {name = "Dragon Cannelloni", imageId = "rbxassetid://104237272754372", checkpoint = 46},
 
-	["47"] = {name = "Espresso Signora", imageId = nil, checkpoint = 47},
+	["47"] = {name = "Espresso Signora", imageId = "rbxassetid://127347078321263", checkpoint = 47},
 
-	["48"] = {name = "Furliflura", imageId = nil, checkpoint = 48},
+	["48"] = {name = "Fluriflura", imageId = "rbxassetid://75786406357134", checkpoint = 48},
 
-	["49"] = {name = "Frigo Camelo", imageId = nil, checkpoint = 49},
+	["49"] = {name = "Frigo Camelo", imageId = "rbxassetid://130205869954857", checkpoint = 49},
 
-	["50"] = {name = "Gangster Footera", imageId = nil, checkpoint = 50},
+	["50"] = {name = "Gangster Footera", imageId = "rbxassetid://126707350537435", checkpoint = 50},
 
-	["51"] = {name = "Gattaino Neonino", imageId = nil, checkpoint = 51},
+	["51"] = {name = "Gattaino Neonino", imageId = "rbxassetid://132841227640765", checkpoint = 51},
 
-	["52"] = {name = "Gattaino Nyanino", imageId = nil, checkpoint = 52},
+	["52"] = {name = "Gattaino Nyanino", imageId = "rbxassetid://115467045408775", checkpoint = 52},
 
-	["53"] = {name = "Girafa Celestre", imageId = nil, checkpoint = 53},
+	["53"] = {name = "Girafa Celestre", imageId = "rbxassetid://71108113503193", checkpoint = 53},
 
-	["54"] = {name = "Glorbo Fruttodrillo", imageId = nil, checkpoint = 54},
+	["54"] = {name = "Glorbo Fruttodrillo", imageId = "rbxassetid://122000574141304", checkpoint = 54},
 
-	["55"] = {name = "Gorillo Watermelondrillo", imageId = nil, checkpoint = 55},
+	["55"] = {name = "Gorillo Watermelondrillo", imageId = "rbxassetid://96351191491854", checkpoint = 55},
 
-	["56"] = {name = "Graipuss Medussi", imageId = nil, checkpoint = 56},
+	["56"] = {name = "Graipuss Medussi", imageId = "rbxassetid://134295269994968", checkpoint = 56},
 
-	["57"] = {name = "La Grande Combinasion", imageId = nil, checkpoint = 57},
+	["57"] = {name = "La Grande Combinasion", imageId = "rbxassetid://109705155411044", checkpoint = 57},
 
-	["58"] = {name = "La Vaca Saturno Saturnita", imageId = nil, checkpoint = 58},
+	["58"] = {name = "La Vaca Saturno Saturnita", imageId = "rbxassetid://124392777113695", checkpoint = 58},
 
-	["59"] = {name = "Lionel_Cactuseli", imageId = nil, checkpoint = 59},
+	["59"] = {name = "Lionel Cactuseli", imageId = "rbxassetid://92252734301928", checkpoint = 59},
 
-	["60"] = {name = "Orangutini Ananassini", imageId = nil, checkpoint = 60},
+	["60"] = {name = "Orangutini Ananassini", imageId = "rbxassetid://139667763136683", checkpoint = 60},
 
-	["61"] = {name = "Pandaccini Bananini", imageId = nil, checkpoint = 61},
+	["61"] = {name = "Pandaccini Bananini", imageId = "rbxassetid://99566594215328", checkpoint = 61},
 
-	["62"] = {name = "Penguino Cocosino", imageId = nil, checkpoint = 62},
+	["62"] = {name = "Penguino Cocosino", imageId = "rbxassetid://97095173381227", checkpoint = 62},
 
-	["63"] = {name = "Perochello Lemonchello", imageId = nil, checkpoint = 63},
+	["63"] = {name = "Perochello Lemonchello", imageId = "rbxassetid://140114370284821", checkpoint = 63},
 
-	["64"] = {name = "Pi Pi Watermelon", imageId = nil, checkpoint = 64},
+	["64"] = {name = "Pi Pi Watermelon", imageId = "rbxassetid://110777406591903", checkpoint = 64},
 
-	["65"] = {name = "Piccione Macchina", imageId = nil, checkpoint = 65},
+	["65"] = {name = "Piccione Macchina", imageId = "rbxassetid://73668670794628", checkpoint = 65},
 
-	["66"] = {name = "Pot Hotspot", imageId = nil, checkpoint = 66},
+	["66"] = {name = "Pot Hotspot", imageId = "rbxassetid://140138661136718", checkpoint = 66},
 
-	["67"] = {name = "Rhino Toasterino", imageId = nil, checkpoint = 67},
+	["67"] = {name = "Rhino Toasterino", imageId = "rbxassetid://98670437706355", checkpoint = 67},
 
-	["68"] = {name = "Salamino Penguino", imageId = nil, checkpoint = 68},
+	["68"] = {name = "Salamino Penguino", imageId = "rbxassetid://110472615796219", checkpoint = 68},
 
-	["69"] = {name = "Sigma Boy", imageId = nil, checkpoint = 69},
+	["69"] = {name = "Sigma Boy", imageId = "rbxassetid://75255767097341", checkpoint = 69},
 
-	["70"] = {name = "Spiderini Dragonfrutini", imageId = nil, checkpoint = 70},
+	["70"] = {name = "Spiderini Dragonfrutini", imageId = "rbxassetid://12905962676", checkpoint = 70},
 
-	["71"] = {name = "Spioniro Golubiro", imageId = nil, checkpoint = 71},
+	["71"] = {name = "Spioniro Golubiro", imageId = "rbxassetid://87936976110135", checkpoint = 71},
 
-	["72"] = {name = "Statutino Libertino", imageId = nil, checkpoint = 72},
+	["72"] = {name = "Statutino Libertino", imageId = "rbxassetid://104746907303248", checkpoint = 72},
 
-	["73"] = {name = "Strawberrelli Flamingelli", imageId = nil, checkpoint = 73},
+	["73"] = {name = "Strawberrelli Flamingelli", imageId = "rbxassetid://140457742943763", checkpoint = 73},
 
-	["74"] = {name = "Svinina Bombardino", imageId = nil, checkpoint = 74},
+	["74"] = {name = "Svinina Bombardino", imageId = "rbxassetid://133433181082974", checkpoint = 74},
 
-	["75"] = {name = "Ta Ta Ta Ta Sahur", imageId = nil, checkpoint = 75},
+	["75"] = {name = "Ta Ta Ta Ta Sahur", imageId = "rbxassetid://122863612906346", checkpoint = 75},
 
-	["76"] = {name = "Talpa Di Fero", imageId = nil, checkpoint = 76},
+	["76"] = {name = "Talpa Di Fero", imageId = "rbxassetid://112851657693349", checkpoint = 76},
 
-	["77"] = {name = "Ti Ti Ti Sahur", imageId = nil, checkpoint = 77},
+	["77"] = {name = "Ti Ti Ti Sahur", imageId = "rbxassetid://117453608311818", checkpoint = 77},
 
-	["78"] = {name = "Tigroli Gre Frutonni", imageId = nil, checkpoint = 78},
+	["78"] = {name = "Tigroli Grapefrutonni", imageId = "rbxassetid://70774257034672", checkpoint = 78},
 
-	["79"] = {name = "Tortutgini Dragonfrutini", imageId = nil, checkpoint = 79},
+	["79"] = {name = "Tortutgini Dragonfrutini", imageId = "rbxassetid://76430568964357", checkpoint = 79},
 
-	["80"] = {name = "Trulimero Trulicina", imageId = nil, checkpoint = 80},
+	["80"] = {name = "Trulimero Trulicina", imageId = "rbxassetid://133233811512236", checkpoint = 80},
 
-	["81"] = {name = "Tukanno Bananno", imageId = nil, checkpoint = 81},
+	["81"] = {name = "Tukanno Bananno", imageId = "rbxassetid://119916031354523", checkpoint = 81},
 
-	["82"] = {name = "Zibra Zubra Zibralini", imageId = nil, checkpoint = 82},
+	["82"] = {name = "Zibra Zubra Zibralini", imageId = "rbxassetid://101079669932576", checkpoint = 82},
 
 }
 

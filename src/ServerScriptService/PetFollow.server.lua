@@ -4,9 +4,9 @@ local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PetFolder = Workspace:WaitForChild("PlayerPets")
 
-local PetsPerRow = 5
-local HorizontalSpacing = 2
-local RowSpacing = 2
+local PetsPerRow = 7
+local HorizontalSpacing = 1.5
+local RowSpacing = 1.5
 local VerticalOffset = -2.5
 local SpringFreq = 10
 local MIN_LOOK_MAG = 1e-6

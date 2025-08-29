@@ -25,7 +25,7 @@ GlobalMessagesEvent.OnClientEvent:Connect(function(productId)
             local itemName = info.Name
             local itemPrice = info.PriceInRobux
 
-            local text = playerName .. " Has bought the " .. itemName .. " for " .. itemPrice .. robuxCode
+            local text = playerName .. " has bought the " .. itemName .. " for " .. itemPrice .. robuxCode
             systemChannel:DisplaySystemMessage(text)
 
         elseif type == "Developer" then
@@ -33,7 +33,7 @@ GlobalMessagesEvent.OnClientEvent:Connect(function(productId)
             local itemName = info.Name
             local itemPrice = info.PriceInRobux
 
-            local text = playerName .. " Has bought the " .. itemName .. " for " .. itemPrice .. robuxCode
+            local text = playerName .. " has bought the " .. itemName .. " for " .. itemPrice .. robuxCode
             systemChannel:DisplaySystemMessage(text)
 
         end

@@ -9,7 +9,7 @@ WinsEvent.OnServerEvent:Connect(function(player)
 	if humanoidRootPart then
 		
 		DataStore.AddWins(player, 1)
-		DataStore.SetCheckpoint(player, 1)	
+		DataStore.SetCheckpoint(player, 1)
 		humanoidRootPart.CFrame = CP1.CFrame + Vector3.new(0, 5, 0)
 	end
 end)

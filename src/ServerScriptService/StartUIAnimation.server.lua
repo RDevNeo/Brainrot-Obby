@@ -1,5 +1,6 @@
 local blackwallModel = game.Workspace.End.BlackWall
 local StartEndgameAnimation = game.ReplicatedStorage.Remotes.UI.EndGameAnimation
+local helperModule = require(game.ReplicatedStorage.Helper)
 
 local playerDebounce = {}
 local DEBOUNCE_TIME = 30
@@ -10,7 +11,7 @@ for _, parts in pairs(blackwallModel:GetChildren()) do
 			local player = game.Players:GetPlayerFromCharacter(hit.Parent)
 			if player then
 				local playerCheckpoint = player.leaderstats.Checkpoint.Value
-				if playerCheckpoint == 30 then
+				if playerCheckpoint == helperModule.GetAllCheckpoints() then
 					local currentTime = tick()
 					local lastTriggerTime = playerDebounce[player.UserId]
 

@@ -13,6 +13,19 @@ function module.KillPart(part: BasePart)
 	
 end
 
+function module.FadePart(part:BasePart)
+	local TweenService = game:GetService("TweenService")
+	local fadeOutInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local fadeOutGoal = {Transparency = 1}
+	local fadeOutTween = TweenService:Create(part, fadeOutInfo, fadeOutGoal)
+	fadeOutTween:Play()
+	wait(fadeOutInfo.Time)
+	local FadeInInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local FadeInGoal = {Transparency = 0}
+	local FadeInTween = TweenService:Create(part, FadeInInfo, FadeInGoal)
+	FadeInTween:Play()
+end
+
 function module.getCurrentCheckpoint(player: Player)
 	return player.Checkpoint.Value
 end
