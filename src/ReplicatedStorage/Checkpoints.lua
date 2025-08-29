@@ -183,9 +183,9 @@ checkpointsData.checkpoints = {
 
 	["45"] = {name = "Cocofanto Elefanto", imageId = "rbxassetid://116289594183632", checkpoint = 45},
 
-	["46"] = {name = "Dragon Cannelloni", imageId = "rbxassetid://104237272754372", checkpoint = 46},
+	["46"] = {name = "Cannelloni Dragoni", imageId = "rbxassetid://104237272754372", checkpoint = 46},
 
-	["47"] = {name = "Espresso Signora", imageId = "rbxassetid://127347078321263", checkpoint = 47},
+	["47"] = {name = "Espressona Signora", imageId = "rbxassetid://127347078321263", checkpoint = 47},
 
 	["48"] = {name = "Fluriflura", imageId = "rbxassetid://75786406357134", checkpoint = 48},
 
@@ -239,7 +239,7 @@ checkpointsData.checkpoints = {
 
 	["73"] = {name = "Strawberrelli Flamingelli", imageId = "rbxassetid://140457742943763", checkpoint = 73},
 
-	["74"] = {name = "Svinina Bombardino", imageId = "rbxassetid://133433181082974", checkpoint = 74},
+	["74"] = {name = "Svinino Bombondino", imageId = "rbxassetid://133433181082974", checkpoint = 74},
 
 	["75"] = {name = "Ta Ta Ta Ta Sahur", imageId = "rbxassetid://122863612906346", checkpoint = 75},
 

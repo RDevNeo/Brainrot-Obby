@@ -272,69 +272,68 @@ function module.SetNight()
 	end
 end
 
--- Utility to set transparency for a model
-local function setModelTransparency(model, transparency)
-	for _, part in ipairs(model:GetDescendants()) do
-		if part:IsA("BasePart") then
-			part.Transparency = transparency
-			for _, decal in ipairs(part:GetChildren()) do
-				if decal:IsA("Decal") then
-					decal.Transparency = transparency
-				end
-			end
-		elseif part:IsA("Accessory") and part:FindFirstChild("Handle") then
-			part.Handle.Transparency = transparency
-		end
-	end
+module.areOthersPetsHidden = false
+
+local function movePet(petModel, targetFolder)
+	if not petModel:IsA("Model") then return end
+	petModel.Parent = targetFolder
 end
 
 function module.HideOthersPets()
+	local HidedPets = game.ReplicatedStorage:WaitForChild("HidedPets")
 	if module.areOthersPetsHidden then return end
 	module.areOthersPetsHidden = true
-	
-	
+
 	for _, folder in ipairs(petsFolder:GetChildren()) do
 		if folder:IsA("Folder") and folder.Name ~= currentPlayer.Name then
-			for _, petModel in ipairs(folder:GetChildren()) do
-				if petModel:IsA("Model") then
-					setModelTransparency(petModel, 1)
-				end
+			local hiddenFolder = HidedPets:FindFirstChild(folder.Name)
+			if not hiddenFolder then
+				hiddenFolder = Instance.new("Folder")
+				hiddenFolder.Name = folder.Name
+				hiddenFolder.Parent = HidedPets
 			end
-			-- Listen for new pets added to this folder
+
+			for _, petModel in ipairs(folder:GetChildren()) do
+				movePet(petModel, hiddenFolder)
+			end
+
 			if not folder:FindFirstChild("HideListener") then
 				local listener = Instance.new("BoolValue")
 				listener.Name = "HideListener"
 				listener.Parent = folder
+
 				folder.ChildAdded:Connect(function(petModel)
-					if petModel:IsA("Model") then
-						setModelTransparency(petModel, 1)
-					end
+					movePet(petModel, hiddenFolder)
 				end)
 			end
 		end
 	end
 
-	-- Listen for new player folders
 	if not petsFolder:FindFirstChild("FolderListener") then
 		local listener = Instance.new("BoolValue")
 		listener.Name = "FolderListener"
 		listener.Parent = petsFolder
+
 		petsFolder.ChildAdded:Connect(function(folder)
 			if folder:IsA("Folder") and folder.Name ~= currentPlayer.Name then
-				for _, petModel in ipairs(folder:GetChildren()) do
-					if petModel:IsA("Model") then
-						setModelTransparency(petModel, 1)
-					end
+				local hiddenFolder = HidedPets:FindFirstChild(folder.Name)
+				if not hiddenFolder then
+					hiddenFolder = Instance.new("Folder")
+					hiddenFolder.Name = folder.Name
+					hiddenFolder.Parent = HidedPets
 				end
-				-- Also listen for pets added later
+
+				for _, petModel in ipairs(folder:GetChildren()) do
+					movePet(petModel, hiddenFolder)
+				end
+
 				if not folder:FindFirstChild("HideListener") then
 					local listener2 = Instance.new("BoolValue")
 					listener2.Name = "HideListener"
 					listener2.Parent = folder
+
 					folder.ChildAdded:Connect(function(petModel)
-						if petModel:IsA("Model") then
-							setModelTransparency(petModel, 1)
-						end
+						movePet(petModel, hiddenFolder)
 					end)
 				end
 			end
@@ -342,58 +341,27 @@ function module.HideOthersPets()
 	end
 end
 
-
-
 function module.ShowOthersPets()
+	local HidedPets = game.ReplicatedStorage:WaitForChild("HidedPets")
 	if not module.areOthersPetsHidden then return end
 	module.areOthersPetsHidden = false
-	
-	for _, folder in ipairs(petsFolder:GetChildren()) do
-		if folder:IsA("Folder") and folder.Name ~= currentPlayer.Name then
-			for _, petModel in ipairs(folder:GetChildren()) do
-				if petModel:IsA("Model") then
-					setModelTransparency(petModel, 0)
-				end
+
+	for _, hiddenFolder in ipairs(HidedPets:GetChildren()) do
+		if hiddenFolder:IsA("Folder") and hiddenFolder.Name ~= currentPlayer.Name then
+			local playerFolder = petsFolder:FindFirstChild(hiddenFolder.Name)
+			if not playerFolder then
+				playerFolder = Instance.new("Folder")
+				playerFolder.Name = hiddenFolder.Name
+				playerFolder.Parent = petsFolder
 			end
-			
-			if not folder:FindFirstChild("ShowListener") then
-				local listener = Instance.new("BoolValue")
-				listener.Name = "ShowListener"
-				listener.Parent = folder
-				folder.ChildAdded:Connect(function(petModel)
-					if petModel:IsA("Model") then
-						setModelTransparency(petModel, 0)
-					end
-				end)
+
+			for _, petModel in ipairs(hiddenFolder:GetChildren()) do
+				movePet(petModel, playerFolder)
 			end
 		end
 	end
 
-	if not petsFolder:FindFirstChild("FolderListenerShow") then
-		local listener = Instance.new("BoolValue")
-		listener.Name = "FolderListenerShow"
-		listener.Parent = petsFolder
-		petsFolder.ChildAdded:Connect(function(folder)
-			if folder:IsA("Folder") and folder.Name ~= currentPlayer.Name then
-				for _, petModel in ipairs(folder:GetChildren()) do
-					if petModel:IsA("Model") then
-						setModelTransparency(petModel, 0)
-					end
-				end
-				
-				if not folder:FindFirstChild("ShowListener") then
-					local listener2 = Instance.new("BoolValue")
-					listener2.Name = "ShowListener"
-					listener2.Parent = folder
-					folder.ChildAdded:Connect(function(petModel)
-						if petModel:IsA("Model") then
-							setModelTransparency(petModel, 0)
-						end
-					end)
-				end
-			end
-		end)
-	end
+	HidedPets:ClearAllChildren()
 end
 
 
