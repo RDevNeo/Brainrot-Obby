@@ -75,4 +75,35 @@ function module.MoveRightDiagonalDown(part: BasePart, deltaTime)
 	part.CFrame = part.CFrame * CFrame.new(-moveSpeed * deltaTime, -moveSpeed * deltaTime, 0)
 end
 
+function module.SpeedUp(part: BasePart)
+	local Players = game:GetService("Players")
+
+	part.Touched:Connect(function(hit)
+		local player = Players:GetPlayerFromCharacter(hit.Parent)
+		if not player then return end
+
+		local character = player.Character
+		if not character then return end
+
+		local humanoid: Humanoid = character:FindFirstChildOfClass("Humanoid")
+		if not humanoid then return end
+
+		humanoid.WalkSpeed = 32
+	end)
+
+	part.TouchEnded:Connect(function(hit)
+		local player = Players:GetPlayerFromCharacter(hit.Parent)
+		if not player then return end
+
+		local character = player.Character
+		if not character then return end
+
+		local humanoid: Humanoid = character:FindFirstChildOfClass("Humanoid")
+		if not humanoid then return end
+
+		humanoid.WalkSpeed = 16
+
+	end)
+end
+
 return module

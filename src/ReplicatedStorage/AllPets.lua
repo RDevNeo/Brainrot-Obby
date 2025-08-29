@@ -52,8 +52,8 @@ Pets.allPets = {
 	["48"] = {name = "Fluriflura"},
 	["49"] = {name = "Frigo Camelo"},
 	["50"] = {name = "Gangster Footera"},
-	["51"] = {name = "Gattaino Neonino"},
-	["52"] = {name = "Gattaino Nyanino"},
+	["51"] = {name = "Gattatino Neonino"},
+	["52"] = {name = "Gattatino Nyanino"},
 	["53"] = {name = "Girafa Celestre"},
 	["54"] = {name = "Glorbo Fruttodrillo"},
 	["55"] = {name = "Gorillo Watermelondrillo"},
@@ -79,11 +79,12 @@ Pets.allPets = {
 	["75"] = {name = "Ta Ta Ta Ta Sahur"},
 	["76"] = {name = "Talpa Di Fero"},
 	["77"] = {name = "Ti Ti Ti Sahur"},
-	["78"] = {name = "Tigroli Gre Frutonni"},
-	["79"] = {name = "Tortutgini Dragonfrutini"},
-	["80"] = {name = "Trulimero Trulicina"},
-	["81"] = {name = "Tukanno Bananno"},
-	["82"] = {name = "Zibra Zubra Zibralini"},
+	["78"] = {name = "Tigroligre Frutonni"},
+	["79"] = {name = "Tim Cheese"},
+	["80"] = {name = "Torrtuginni Dragonfrutini"},
+	["81"] = {name = "Trulimero Trulicina"},
+	["82"] = {name = "Tukanno Bananno"},
+	["83"] = {name = "Zibra Zubra Zibralini"},
 
 }
 

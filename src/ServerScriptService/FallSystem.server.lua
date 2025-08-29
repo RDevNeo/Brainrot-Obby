@@ -2,8 +2,161 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local checkpointsFolder = game.Workspace.CheckPoints
 local ds = require(game.ReplicatedStorage.DataStore)
+local TrussFolder = workspace:WaitForChild("TrussFolder")
 local fallStartTimes = {}
 local toolStopTimes = {}
+
+local PROXIMITY_THRESHOLD = 3
+local TRUSS_CLEAR_DELAY = 2
+
+local touchedCounts = {}
+local pendingClearTokens = {}
+local partConns = {}
+local trussParts = {}
+
+local function getPlayerFromTouchPart(part)
+	local current = part
+	for i = 1, 10 do
+		if not current then break end
+		local player = Players:GetPlayerFromCharacter(current)
+		if player then return player end
+		current = current.Parent
+	end
+	return nil
+end
+
+local function addTrussPartToCache(part)
+	if not part or not part:IsA("BasePart") then return end
+	trussParts[#trussParts + 1] = part
+end
+
+local function removeTrussPartFromCache(part)
+	for i = #trussParts, 1, -1 do
+		if trussParts[i] == part then
+			table.remove(trussParts, i)
+		end
+	end
+end
+
+local function onPartTouched(otherPart)
+	local player = getPlayerFromTouchPart(otherPart)
+	if not player then
+		return
+	end
+
+	local id = player.UserId
+
+	if pendingClearTokens[id] then
+		pendingClearTokens[id] = nil
+	end
+
+	touchedCounts[id] = (touchedCounts[id] or 0) + 1
+end
+
+local function onPartTouchEnded(otherPart)
+	local player = getPlayerFromTouchPart(otherPart)
+	if not player then
+		return
+	end
+
+	local id = player.UserId
+	local newCount = (touchedCounts[id] or 0) - 1
+
+	if newCount > 0 then
+		touchedCounts[id] = newCount
+	else
+		touchedCounts[id] = nil
+		local token = tick()
+		pendingClearTokens[id] = token
+
+		task.spawn(function()
+			task.wait(TRUSS_CLEAR_DELAY)
+			if pendingClearTokens[id] == token and (touchedCounts[id] or 0) == 0 then
+				pendingClearTokens[id] = nil
+			end
+		end)
+	end
+end
+
+local function connectTrussPart(part)
+	if not part or not part:IsA("BasePart") or partConns[part] then return end
+
+	local tConn = part.Touched:Connect(onPartTouched)
+
+	local teConn = nil
+	local ok, conOrErr = pcall(function() return part.TouchEnded:Connect(onPartTouchEnded) end)
+	if ok then teConn = conOrErr end
+
+	partConns[part] = {Touched = tConn, TouchEnded = teConn}
+	addTrussPartToCache(part)
+end
+
+local function disconnectTrussPart(part)
+	local conns = partConns[part]
+	if not conns then return end
+	if conns.Touched and conns.Touched.Connected then
+		pcall(function() conns.Touched:Disconnect() end)
+	end
+	if conns.TouchEnded and conns.TouchEnded.Connected then
+		pcall(function() conns.TouchEnded:Disconnect() end)
+	end
+	partConns[part] = nil
+	removeTrussPartFromCache(part)
+end
+
+for _, desc in ipairs(TrussFolder:GetDescendants()) do
+	if desc:IsA("BasePart") then
+		connectTrussPart(desc)
+	end
+end
+
+TrussFolder.DescendantAdded:Connect(function(desc)
+	if desc:IsA("BasePart") then connectTrussPart(desc) end
+end)
+TrussFolder.DescendantRemoving:Connect(function(desc)
+	if desc:IsA("BasePart") then disconnectTrussPart(desc) end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+	touchedCounts[player.UserId] = nil
+	pendingClearTokens[player.UserId] = nil
+end)
+
+local function isPlayerTouchingTruss(player)
+	if not player or not player.Character then return false end
+	local id = player.UserId
+
+	if (touchedCounts[id] or 0) > 0 then
+		return true
+	end
+
+	if pendingClearTokens[id] then
+		return true
+	end
+
+	local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		local ok, state = pcall(function() return humanoid:GetState() end)
+		if ok and state == Enum.HumanoidStateType.Climbing then
+			return true
+		end
+	end
+
+	local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return false end
+	for _, part in ipairs(trussParts) do
+		if part and part.Parent and part:IsA("BasePart") then
+			local distance = (hrp.Position - part.Position).Magnitude
+			if distance <= PROXIMITY_THRESHOLD then
+				print(("[TrussDetect] proximity hit for %s (dist=%.2f) -> part=%s")
+					:format(player.Name, distance, part:GetFullName()))
+				return true
+			end
+		end
+	end
+
+	return false
+end
 
 local function isUsingTool(player: Player)
 	return player.Character and player.Character:FindFirstChildWhichIsA("Tool") ~= nil
@@ -56,8 +209,8 @@ local function SetupCheckpointTeleporter()
 end
 
 local function CheckFalling(player: Player)
-	if not player.Character then return end
-	local humanoid: Humanoid = player.Character:WaitForChild("Humanoid")
+	if not player or not player.Character then return end
+	local humanoid: Humanoid = player.Character:FindFirstChild("Humanoid")
 	if not humanoid then return end
 	local currentTime = tick()
 
@@ -69,14 +222,19 @@ local function CheckFalling(player: Player)
 		toolStopTimes[player] = nil
 	end
 
+	local touching = isPlayerTouchingTruss(player)
+	local fallSince = fallStartTimes[player] and (currentTime - fallStartTimes[player]) or nil
+	local toolSince = toolStopTimes[player] and (currentTime - toolStopTimes[player]) or nil
+
 	if humanoid.FloorMaterial == Enum.Material.Air then
 		if not fallStartTimes[player] then
 			fallStartTimes[player] = currentTime
-
-		elseif currentTime - fallStartTimes[player] >= 0.8 then
+		elseif currentTime - fallStartTimes[player] >= 1.2 then
 			if playerIsUsingTool then
 				return
 			elseif toolStopTimes[player] and (currentTime - toolStopTimes[player]) < 2 then
+				return
+			elseif touching then
 				return
 			else
 				TeleportToCheckpoint(player)
@@ -90,7 +248,12 @@ local function CheckFalling(player: Player)
 end
 
 Players.PlayerAdded:Connect(function(player)
-	RunService.Heartbeat:Connect(function()
+	local conn
+	conn = RunService.Heartbeat:Connect(function()
+		if not player.Parent then
+			if conn and conn.Connected then conn:Disconnect() end
+			return
+		end
 		CheckFalling(player)
 	end)
 
@@ -103,6 +266,8 @@ end)
 Players.PlayerRemoving:Connect(function(player)
 	fallStartTimes[player] = nil
 	toolStopTimes[player] = nil
+	touchedCounts[player.UserId] = nil
+	pendingClearTokens[player.UserId] = nil
 end)
 
 SetupCheckpointTeleporter()

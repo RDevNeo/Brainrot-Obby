@@ -193,9 +193,9 @@ checkpointsData.checkpoints = {
 
 	["50"] = {name = "Gangster Footera", imageId = "rbxassetid://126707350537435", checkpoint = 50},
 
-	["51"] = {name = "Gattaino Neonino", imageId = "rbxassetid://132841227640765", checkpoint = 51},
+	["51"] = {name = "Gattatino Neonino", imageId = "rbxassetid://132841227640765", checkpoint = 51},
 
-	["52"] = {name = "Gattaino Nyanino", imageId = "rbxassetid://115467045408775", checkpoint = 52},
+	["52"] = {name = "Gattatino Nyanino", imageId = "rbxassetid://115467045408775", checkpoint = 52},
 
 	["53"] = {name = "Girafa Celestre", imageId = "rbxassetid://71108113503193", checkpoint = 53},
 
@@ -247,15 +247,17 @@ checkpointsData.checkpoints = {
 
 	["77"] = {name = "Ti Ti Ti Sahur", imageId = "rbxassetid://117453608311818", checkpoint = 77},
 
-	["78"] = {name = "Tigroli Grapefrutonni", imageId = "rbxassetid://70774257034672", checkpoint = 78},
+	["78"] = {name = "Tigroligre Frutonni", imageId = "rbxassetid://70774257034672", checkpoint = 78},
 
-	["79"] = {name = "Tortutgini Dragonfrutini", imageId = "rbxassetid://76430568964357", checkpoint = 79},
+	["79"] = {name = "Tim Cheese", imageId = "rbxassetid://78970759290289", checkpoint = 79},
 
-	["80"] = {name = "Trulimero Trulicina", imageId = "rbxassetid://133233811512236", checkpoint = 80},
+	["80"] = {name = "Torrtuginni Dragonfrutini", imageId = "rbxassetid://76430568964357", checkpoint = 79},
 
-	["81"] = {name = "Tukanno Bananno", imageId = "rbxassetid://119916031354523", checkpoint = 81},
+	["81"] = {name = "Trulimero Trulicina", imageId = "rbxassetid://133233811512236", checkpoint = 80},
 
-	["82"] = {name = "Zibra Zubra Zibralini", imageId = "rbxassetid://101079669932576", checkpoint = 82},
+	["82"] = {name = "Tukanno Bananno", imageId = "rbxassetid://119916031354523", checkpoint = 81},
+
+	["83"] = {name = "Zibra Zubra Zibralini", imageId = "rbxassetid://101079669932576", checkpoint = 82},
 
 }
 
